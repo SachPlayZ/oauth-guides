@@ -312,7 +312,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 **Stack:**
 - Next.js (App Router, TypeScript), Tailwind, shadcn/ui.
 - Neon Postgres via Drizzle.
-- LLM: Gemini via `@google/genai` (free tier), behind `lib/llm.ts`. Search and page reading: Tavily (free tier), behind `lib/search.ts`. See ADR-0004.
+- LLM: Gemini via `@google/genai` (paid tier, billing on — free tier is 20 requests/day/model), behind `lib/llm.ts`. Search and page reading: Tavily (free tier), behind `lib/search.ts`. See ADR-0004.
 - Vercel with Fluid compute.
 
 **Long runs:**
@@ -369,7 +369,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
   | `q_changes` | Changes in the last ~18 months? |
   | `q_gotchas` | Community pitfalls (Reported)? |
 
-- **Budget:** ~90–150s, ~8 search credits + ~3 extract credits per Guide (≈ 90 Guides/month on Tavily's free 1,000 credits), $0 on the Gemini free tier. Measure time and credits.
+- **Budget:** ~90–150s, ~8 search credits + ~3 extract credits per Guide (≈ 90 Guides/month on Tavily's free 1,000 credits), cents per Guide on Gemini Flash (paid). Measure time and credits.
 
 ### Stage 4: Quote check (`lib/agent/quotecheck.ts`)
 - Normalize text, then require an exact substring or a fuzzy ratio ≥ 0.9.
@@ -706,7 +706,7 @@ DEMO_PASSCODE=               # required for generate/regenerate; share with revi
 | Missing facts read as "easy" | Gate questions answered yes/no/unknown; unknowns show as a range with low confidence |
 | Stale or conflicting sources | Page dates; `q_changes`; conflict gotchas; last checked |
 | JS-rendered docs | "Not machine-checkable"; lower confidence |
-| Free-tier limits hit during the demo (Gemini RPD, Tavily 1,000 credits/month) | Per-run search budgets, per-IP and global limits, passcode, existing-Guide cache; check AI Studio rate limits before the demo |
+| Limits or cost during the demo (Tavily 1,000 credits/month, Gemini spend) | Per-run search budgets, per-IP and global limits, passcode, existing-Guide cache; Google Cloud budget alert |
 | Secrets leak | Env-only keys, gitignore, blurred screenshots, rotation |
 
 ## 25. Future work
