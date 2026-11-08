@@ -312,7 +312,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 **Stack:**
 - Next.js (App Router, TypeScript), Tailwind, shadcn/ui.
 - Neon Postgres via Drizzle.
-- LLM: Gemini via `@google/genai` (paid tier, billing on — free tier is 20 requests/day/model), behind `lib/llm.ts`. Search and page reading: Tavily (free tier), behind `lib/search.ts`. See ADR-0004.
+- LLM: Groq free tier (OpenAI-compatible, `openai/gpt-oss-120b` → `qwen/qwen3.8-27b` → `openai/gpt-oss-20b` fallback chain; 8K tokens/min per model), behind `lib/llm.ts`. Search and page reading: Tavily (free tier), behind `lib/search.ts`. See ADR-0004.
 - Vercel with Fluid compute.
 
 **Long runs:**
@@ -329,7 +329,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 ### Stage 0: Resolve (`lib/agent/resolve.ts`)
 1. If the input is a URL, extract the registrable domain.
 2. Search Composio Toolkits (`GET /api/v3.1/toolkits?search=`). A clear match sets `toolkitSlug`.
-3. If there's no match, run a short Gemini tool loop over Tavily search (≤ 3 searches). It returns `{productName, providerName, domain, devPortalUrl?, docsCandidates[]}`, or `{candidates[]}`.
+3. If there's no match, run a short LLM tool loop over Tavily search (≤ 3 searches). It returns `{productName, providerName, domain, devPortalUrl?, docsCandidates[]}`, or `{candidates[]}`.
 4. If there are 2+ plausible candidates ("Box", "Monday", "Front"), emit a `candidates` event and the user picks. Never guess.
 5. If nothing is found ("asdfgh"), return "Couldn't identify this app — try its website."
 6. If a Guide version under 30 days old exists, return `existingSlug` with a Regenerate option.
@@ -369,7 +369,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
   | `q_changes` | Changes in the last ~18 months? |
   | `q_gotchas` | Community pitfalls (Reported)? |
 
-- **Budget:** ~90–150s, ~8 search credits + ~3 extract credits per Guide (≈ 90 Guides/month on Tavily's free 1,000 credits), cents per Guide on Gemini Flash (paid). Measure time and credits.
+- **Budget:** ~90–150s, ~8 search credits + ~3 extract credits per Guide (≈ 90 Guides/month on Tavily's free 1,000 credits), $0 on Groq's free tier (8K tokens/min per model, so each request stays under ~6.5K tokens). Measure time and credits.
 
 ### Stage 4: Quote check (`lib/agent/quotecheck.ts`)
 - Normalize text, then require an exact substring or a fuzzy ratio ≥ 0.9.
@@ -652,13 +652,13 @@ The improvement loop is the main proof of "thoughtful use of agents": find a pat
 ## 21. Deployment, env, security
 
 ```
-GEMINI_API_KEY=
+GROQ_API_KEY=
 TAVILY_API_KEY=
 COMPOSIO_API_KEY=            # server-side only
 DATABASE_URL=
-MODEL_RESEARCH=gemini-3.8-flash
-MODEL_SYNTH=gemini-3.8-flash
-MODEL_VERIFY=gemini-3.5-flash-lite
+MODEL_RESEARCH=groq:openai/gpt-oss-120b,groq:qwen/qwen3.8-27b,groq:openai/gpt-oss-20b
+MODEL_SYNTH=groq:openai/gpt-oss-120b,groq:qwen/qwen3.8-27b,groq:openai/gpt-oss-20b
+MODEL_VERIFY=groq:openai/gpt-oss-20b,groq:qwen/qwen3.8-27b,groq:openai/gpt-oss-120b
 MAX_GENERATIONS_PER_HOUR=30
 DEMO_PASSCODE=               # required for generate/regenerate; share with reviewers
 ```
@@ -706,7 +706,7 @@ DEMO_PASSCODE=               # required for generate/regenerate; share with revi
 | Missing facts read as "easy" | Gate questions answered yes/no/unknown; unknowns show as a range with low confidence |
 | Stale or conflicting sources | Page dates; `q_changes`; conflict gotchas; last checked |
 | JS-rendered docs | "Not machine-checkable"; lower confidence |
-| Limits or cost during the demo (Tavily 1,000 credits/month, Gemini spend) | Per-run search budgets, per-IP and global limits, passcode, existing-Guide cache; Google Cloud budget alert |
+| Limits or cost during the demo (Tavily 1,000 credits/month, Groq tokens/min) | Per-run search budgets, per-IP and global limits, passcode, existing-Guide cache; model fallback chain |
 | Secrets leak | Env-only keys, gitignore, blurred screenshots, rotation |
 
 ## 25. Future work
