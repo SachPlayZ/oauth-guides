@@ -304,7 +304,7 @@ Route ── job row ── waitUntil(runPipeline(jobId)) ── {jobId} | {cand
   ▼
 Pipeline — writes job_events
   0 Resolve ─► 1 Probes ─► 2 Composio lookup (if Toolkit) ─► 3 Research agent
-    ─► 4 Quote check ─► 5 Synthesize ─► 6 Verify ─► 7 Rubric + persist Guide version ─► guide_ready
+    ─► 4 Quote check ─► 6 Verify ─► 5 Synthesize ─► 7 Rubric + persist Guide version ─► guide_ready
   ▼
 Neon Postgres (products, guide_versions, jobs, job_events)
 ```
@@ -376,6 +376,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 - An unmatched quote on a Verdict-relevant finding makes the Claim Unverified.
 
 ### Stage 5: Synthesize (`lib/agent/synthesize.ts`)
+- **Built (M3c):** Claims are made in code, 1:1 from findings (`f*`), probes (`p*`, Tested) and Composio (`k*`) (`lib/agent/claims.ts`). Synthesis is two compact `generateJson` calls (rows + verdict, then steps + gotchas) to fit Groq's tokens/minute. Code drops citations of unknown Claims, fills every unsettled Gate with `unknown`, and lists the default row's unknown Gates in `unknowns`.
 - **Model:** `MODEL_SYNTH`. Structured output via `generateJson` (`responseJsonSchema` generated from zod, minus the computed fields), validated by zod with one retry.
 - **Rules:**
   - Every fact cites Claim ids. No new facts.
@@ -391,6 +392,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 - Validate with zod. On failure, retry once with the errors.
 
 ### Stage 6: Verify (`lib/agent/verify.ts`)
+- **Runs before Stage 5**, on the Claims, so synthesis sees each Claim's final Evidence label.
 - **Model:** `MODEL_VERIFY`, ~10 Claims per call.
 - Each Claim gets a verdict: `supported | partial | unsupported | conflicting`.
 - `unsupported` → the Claim becomes Unverified. `conflicting` → add the gotcha "Sources disagree".

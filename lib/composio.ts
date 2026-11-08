@@ -42,7 +42,8 @@ function summarize(t: RawToolkit): ToolkitSummary {
     appUrl: t.meta?.app_url ?? null,
     logo: t.meta?.logo ?? null,
     description: t.meta?.description ?? "",
-    authSchemes: t.auth_schemes ?? [],
+    // The detail endpoint omits auth_schemes; its modes live in auth_config_details.
+    authSchemes: t.auth_schemes ?? (t.auth_config_details ?? []).map((d) => d.mode),
     managedAuthAvailable: (t.composio_managed_auth_schemes ?? []).length > 0,
     authGuideUrl: t.auth_guide_url ?? null,
   };
