@@ -108,7 +108,7 @@ export async function resolveViaWeb(query: string, usage?: Usage): Promise<Resol
   let report: z.infer<typeof WebResolution> | null = null;
   let searches = 0;
   await runToolLoop({
-    model: MODELS.research(),
+    models: MODELS.research(),
     system: RESOLVE_SYSTEM,
     prompt: `Query: ${JSON.stringify(query)}\nFind the product and its official OAuth/developer docs.`,
     maxTurns: 6,
