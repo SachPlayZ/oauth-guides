@@ -312,7 +312,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 **Stack:**
 - Next.js (App Router, TypeScript), Tailwind, shadcn/ui.
 - Neon Postgres via Drizzle.
-- `@anthropic-ai/sdk`.
+- LLM: Gemini via `@google/genai` (free tier), behind `lib/llm.ts`. Search and page reading: Tavily (free tier), behind `lib/search.ts`. See ADR-0004.
 - Vercel with Fluid compute.
 
 **Long runs:**
@@ -329,7 +329,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 ### Stage 0: Resolve (`lib/agent/resolve.ts`)
 1. If the input is a URL, extract the registrable domain.
 2. Search Composio Toolkits (`GET /api/v3.1/toolkits?search=`). A clear match sets `toolkitSlug`.
-3. If there's no match, make one small Claude call with web_search. It returns `{productName, providerName, domain, devPortalUrl?, docsCandidates[]}`, or `{candidates[]}`.
+3. If there's no match, run a short Gemini tool loop over Tavily search (≤ 3 searches). It returns `{productName, providerName, domain, devPortalUrl?, docsCandidates[]}`, or `{candidates[]}`.
 4. If there are 2+ plausible candidates ("Box", "Monday", "Front"), emit a `candidates` event and the user picks. Never guess.
 5. If nothing is found ("asdfgh"), return "Couldn't identify this app — try its website."
 6. If a Guide version under 30 days old exists, return `existingSlug` with a Regenerate option.
@@ -347,13 +347,12 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 
 ### Stage 3: Research agent (`lib/agent/research.ts`)
 - **Model:** `MODEL_RESEARCH`.
-- **Server tools:** `web_search_20260209` (`max_uses` 8) and `web_fetch_20260209` (`max_uses` 12), the dynamic-filtering versions for Sonnet 5.5. No beta header needed.
-- **Client tool:** `record_finding(question_id, finding, url, quote, official, page_date?)`.
-- **Loop:**
-  - Handle `tool_use` by saving the finding and returning `"ok"`.
-  - On `pause_turn`, re-send the conversation.
-  - Emit `search` and `fetch` events from `server_tool_use` blocks.
-- web_fetch only fetches URLs already in the conversation, so pass `docsCandidates` in the prompt.
+- **Tools** (all client-side, run by `runToolLoop` in `lib/llm.ts`):
+  - `web_search(query)`: Tavily search (1 credit). Budget 8 per Guide.
+  - `read_page(urls[])`: Tavily extract, up to 5 URLs per call. Budget 12 URLs per Guide. Page text is kept for the quote check.
+  - `record_finding(question_id, finding, url, quote, official, page_date?)`.
+- **Loop:** each tool call emits a `search`, `fetch` or `finding` event; over-budget calls return an error telling the model to wrap up.
+- Pass `docsCandidates` from Stage 0 in the prompt so the agent starts from official docs.
 - **Questions** (fixed ids):
 
   | Id | Question |
@@ -370,16 +369,16 @@ Neon Postgres (products, guide_versions, jobs, job_events)
   | `q_changes` | Changes in the last ~18 months? |
   | `q_gotchas` | Community pitfalls (Reported)? |
 
-- **Budget:** ~90–150s and ≤ $1 per Guide. Measure both.
+- **Budget:** ~90–150s, ~8 search credits + ~3 extract credits per Guide (≈ 90 Guides/month on Tavily's free 1,000 credits), $0 on the Gemini free tier. Measure time and credits.
 
 ### Stage 4: Quote check (`lib/agent/quotecheck.ts`)
 - Normalize text, then require an exact substring or a fuzzy ratio ≥ 0.9.
-- Use the web_fetch content if available; otherwise fetch the page ourselves.
+- Use the page text captured by `read_page`; otherwise extract the page via Tavily.
 - An unreadable page gets `quoteMatched: false` with the note "not machine-checkable".
 - An unmatched quote on a Verdict-relevant finding makes the Claim Unverified.
 
 ### Stage 5: Synthesize (`lib/agent/synthesize.ts`)
-- **Model:** `MODEL_SYNTH`. Sonnet 5.5 rejects forced `tool_choice` (`any`/`tool` → 400), so use structured outputs (`output_config.format` with the JSON schema generated from zod, minus the computed fields), or `submit_guide` with `tool_choice: auto` + `strict: true` + a prompt instruction.
+- **Model:** `MODEL_SYNTH`. Structured output via `generateJson` (`responseJsonSchema` generated from zod, minus the computed fields), validated by zod with one retry.
 - **Rules:**
   - Every fact cites Claim ids. No new facts.
   - Every Usage row answers every Gate question. If no finding settles a question, the answer is `unknown`, never `no`.
@@ -653,12 +652,13 @@ The improvement loop is the main proof of "thoughtful use of agents": find a pat
 ## 21. Deployment, env, security
 
 ```
-ANTHROPIC_API_KEY=
+GEMINI_API_KEY=
+TAVILY_API_KEY=
 COMPOSIO_API_KEY=            # server-side only
 DATABASE_URL=
-MODEL_RESEARCH=claude-sonnet-5-5
-MODEL_SYNTH=claude-sonnet-5-5
-MODEL_VERIFY=claude-haiku-5-5
+MODEL_RESEARCH=gemini-3.8-flash
+MODEL_SYNTH=gemini-3.8-flash
+MODEL_VERIFY=gemini-3.5-flash-lite
 MAX_GENERATIONS_PER_HOUR=30
 DEMO_PASSCODE=               # required for generate/regenerate; share with reviewers
 ```
@@ -706,7 +706,7 @@ DEMO_PASSCODE=               # required for generate/regenerate; share with revi
 | Missing facts read as "easy" | Gate questions answered yes/no/unknown; unknowns show as a range with low confidence |
 | Stale or conflicting sources | Page dates; `q_changes`; conflict gotchas; last checked |
 | JS-rendered docs | "Not machine-checkable"; lower confidence |
-| Cost runaway | `max_uses`, per-IP and global limits, passcode |
+| Free-tier limits hit during the demo (Gemini RPD, Tavily 1,000 credits/month) | Per-run search budgets, per-IP and global limits, passcode, existing-Guide cache; check AI Studio rate limits before the demo |
 | Secrets leak | Env-only keys, gitignore, blurred screenshots, rotation |
 
 ## 25. Future work

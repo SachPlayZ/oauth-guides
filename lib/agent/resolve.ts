@@ -1,9 +1,10 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { hasComposioKey, searchToolkits, type ToolkitSummary } from "../composio";
+import { MODELS, runToolLoop, type Usage } from "../llm";
+import { webSearch } from "../search";
 
 // Stage 0: turn free text (a name or URL) into one Provider product, a short list to pick from,
-// or "not found". Composio Toolkits first, then one LLM web-search call (ADR-0003).
+// or "not found". Composio Toolkits first, then a short LLM web-search loop (ADR-0003).
 
 export type ResolvedProduct = {
   slug: string;
@@ -83,74 +84,59 @@ export function matchToolkits(query: string, items: ToolkitSummary[]): Resolutio
   return null;
 }
 
-// --- Web fallback: one small Claude call with web search ---
+// --- Web fallback: a short Gemini tool loop over Tavily search ---
 
 const WebProduct = z.object({
   productName: z.string(),
-  providerName: z.string(),
-  domain: z.string(),
-  devPortalUrl: z.string().nullable(),
-  docsCandidates: z.array(z.string()),
-  why: z.string(),
+  providerName: z.string().describe("The company that runs the OAuth server"),
+  domain: z.string().describe("Registrable domain, e.g. linear.app"),
+  devPortalUrl: z.string().nullable().describe("Where developers register OAuth apps, if found"),
+  docsCandidates: z.array(z.string()).describe("Official OAuth/developer doc URLs you found"),
+  why: z.string().describe("One line on what this product is"),
 });
 const WebResolution = z.object({
   status: z.enum(["resolved", "ambiguous", "not_found"]),
   products: z.array(WebProduct),
 });
 
-const REPORT_TOOL: Anthropic.Tool = {
-  name: "report_resolution",
-  description:
-    "Report which software product the query refers to. status=resolved with exactly one product when you are confident; ambiguous with 2–5 products when several plausible products share the name; not_found when no software product with a public API matches.",
-  input_schema: {
-    type: "object",
-    properties: {
-      status: { type: "string", enum: ["resolved", "ambiguous", "not_found"] },
-      products: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            productName: { type: "string" },
-            providerName: { type: "string", description: "The company that runs the OAuth server" },
-            domain: { type: "string", description: "Registrable domain, e.g. linear.app" },
-            devPortalUrl: { type: ["string", "null"], description: "Where developers register OAuth apps" },
-            docsCandidates: { type: "array", items: { type: "string" }, description: "Official OAuth/developer doc URLs you found" },
-            why: { type: "string", description: "One line on what this product is" },
-          },
-          required: ["productName", "providerName", "domain", "devPortalUrl", "docsCandidates", "why"],
+const RESOLVE_SYSTEM =
+  "You identify which software product a developer means, so another agent can research registering an OAuth app with it. Use web_search to find the product's official site and developer/OAuth documentation (at most 3 searches). Never guess between products that share a name: report them as ambiguous with 2-5 products. Report not_found when no software product with a public API matches. Finish by calling report_resolution exactly once.";
+
+const MAX_SEARCHES = 3;
+
+export async function resolveViaWeb(query: string, usage?: Usage): Promise<Resolution> {
+  let report: z.infer<typeof WebResolution> | null = null;
+  let searches = 0;
+  await runToolLoop({
+    model: MODELS.research(),
+    system: RESOLVE_SYSTEM,
+    prompt: `Query: ${JSON.stringify(query)}\nFind the product and its official OAuth/developer docs.`,
+    maxTurns: 6,
+    usage,
+    stop: () => report !== null,
+    tools: [
+      {
+        name: "web_search",
+        description: "Search the web. Returns titles, URLs and snippets.",
+        parameters: z.object({ query: z.string() }),
+        run: async (args) => {
+          if (++searches > MAX_SEARCHES) throw new Error("Search budget used up; call report_resolution now.");
+          const results = await webSearch((args as { query: string }).query, { maxResults: 5 });
+          return results.map((r) => ({ title: r.title, url: r.url, snippet: r.content.slice(0, 300) }));
         },
       },
-    },
-    required: ["status", "products"],
-  },
-};
-
-const RESOLVE_SYSTEM =
-  "You identify which software product a developer means, so another agent can research registering an OAuth app with it. Use web search to find the product's official site and developer/OAuth documentation. Never guess between products that share a name: report them as ambiguous. When done, call report_resolution exactly once.";
-
-export async function resolveViaWeb(query: string, client = new Anthropic()): Promise<Resolution> {
-  const messages: Anthropic.MessageParam[] = [
-    { role: "user", content: `Query: ${JSON.stringify(query)}\nFind the product and its official OAuth/developer docs.` },
-  ];
-  const tools: Anthropic.ToolUnion[] = [{ type: "web_search_20260209", name: "web_search", max_uses: 3 }, REPORT_TOOL];
-
-  for (let turn = 0; turn < 6; turn++) {
-    const res = await client.messages.create({
-      model: process.env.MODEL_RESEARCH || "claude-sonnet-5-5",
-      max_tokens: 4096,
-      system: RESOLVE_SYSTEM,
-      tools,
-      tool_choice: { type: "auto" },
-      output_config: { effort: "low" },
-      messages,
-    });
-    const report = res.content.find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === REPORT_TOOL.name);
-    if (report) return toResolution(WebResolution.parse(report.input));
-    if (res.stop_reason !== "pause_turn") break;
-    messages.push({ role: "assistant", content: res.content }); // let server tools continue
-  }
-  return { kind: "not_found", message: "Couldn't identify this app. Try its website." };
+      {
+        name: "report_resolution",
+        description: "Report which software product the query refers to.",
+        parameters: WebResolution,
+        run: async (args) => {
+          report = args as z.infer<typeof WebResolution>;
+          return "ok";
+        },
+      },
+    ],
+  });
+  return report ? toResolution(report) : { kind: "not_found", message: "Couldn't identify this app. Try its website." };
 }
 
 function toResolution(r: z.infer<typeof WebResolution>): Resolution {
@@ -172,7 +158,7 @@ function toResolution(r: z.infer<typeof WebResolution>): Resolution {
   return { kind: "not_found", message: "Couldn't identify this app. Try its website." };
 }
 
-export async function resolve(query: string): Promise<Resolution> {
+export async function resolve(query: string, usage?: Usage): Promise<Resolution> {
   const q = query.trim();
   if (!q) return { kind: "not_found", message: "Type an app name or paste its website." };
   if (hasComposioKey()) {
@@ -181,5 +167,5 @@ export async function resolve(query: string): Promise<Resolution> {
     const match = matchToolkits(q, await searchToolkits(term));
     if (match) return match;
   }
-  return resolveViaWeb(q);
+  return resolveViaWeb(q, usage);
 }
