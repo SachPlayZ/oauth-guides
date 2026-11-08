@@ -15,5 +15,7 @@ Groq's limits, read from response headers on 2026-11-09: 1,000 requests/day and 
 ## Consequences
 
 - All LLM calls go through `lib/llm.ts` (OpenAI-compatible `provider:model` chains, 30s per-call timeout, token-budget trimming) and all web access through `lib/search.ts`. Switching to another OpenAI-compatible provider is a config change.
-- Prompts and tool results must stay compact; long pages are read in chunks, not whole.
-- Tavily's 1,000 free credits/month cap live generation at about 90 Guides a month. Budgets and the existing-Guide cache protect the demo.
+- Prompts must stay compact; pages are cut to focused excerpts.
+- The Research agent is **gather, then extract**, not a free tool loop. A loop resends the whole conversation each turn; on 8K tokens/min that was ~4 turns/min and a Slack run stalled at 3 findings in 50s. Code does the searching and reading; 4 parallel LLM calls do the extraction. Slack now takes ~10s and 4 calls. We lose the model choosing follow-up searches.
+- `lib/llm.ts` reads `x-ratelimit-remaining-tokens` / `x-ratelimit-reset-tokens` and sends each call to a model with headroom, so parallel calls spread across the chain.
+- Tavily's 1,000 free credits/month cap live generation at about 140 Guides a month. Budgets and the existing-Guide cache protect the demo.

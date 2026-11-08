@@ -346,13 +346,11 @@ Neon Postgres (products, guide_versions, jobs, job_events)
 - No Toolkit means `composio: null`, and the steps end at "OAuth app ready".
 
 ### Stage 3: Research agent (`lib/agent/research.ts`)
-- **Model:** `MODEL_RESEARCH`.
-- **Tools** (all client-side, run by `runToolLoop` in `lib/llm.ts`):
-  - `web_search(query)`: Tavily search (1 credit). Budget 8 per Guide.
-  - `read_page(urls[])`: Tavily extract, up to 5 URLs per call. Budget 12 URLs per Guide. Page text is kept for the quote check.
-  - `record_finding(question_id, finding, url, quote, official, page_date?)`.
-- **Loop:** each tool call emits a `search`, `fetch` or `finding` event; over-budget calls return an error telling the model to wrap up.
-- Pass `docsCandidates` from Stage 0 in the prompt so the agent starts from official docs.
+- **Shape: gather, then extract** (not a free tool loop; ADR-0004). A loop resends the whole conversation every turn, and Groq's 8K tokens/min per model allowed ~4 turns/min, so a Slack run couldn't finish in 150s.
+- **Gather (code):** 5 parallel Tavily searches (one per question group, plus one community query), then read `docsCandidates` plus the top official results, ≤ 10 pages (2 extract credits). Full page text is kept for the quote check.
+- **Extract (LLM):** one `generateJson` call per question group (setup, gates, distribution, changes) over focused page excerpts (`lib/agent/excerpt.ts`) and search snippets, ≤ ~13K chars each, run in parallel across models. Findings cite a source id, so the model can't invent URLs.
+- **Gates:** the gates call's schema requires all 9 Gate keys, each `yes | no | not_found` with `applies_to: production | listing_only | both`. A yes/no without a real source is downgraded to `not_found`.
+- **Events:** `search`, `fetch`, `finding`, `warning`.
 - **Questions** (fixed ids):
 
   | Id | Question |
@@ -369,7 +367,7 @@ Neon Postgres (products, guide_versions, jobs, job_events)
   | `q_changes` | Changes in the last ~18 months? |
   | `q_gotchas` | Community pitfalls (Reported)? |
 
-- **Budget:** ~90–150s, ~8 search credits + ~3 extract credits per Guide (≈ 90 Guides/month on Tavily's free 1,000 credits), $0 on Groq's free tier (8K tokens/min per model, so each request stays under ~6.5K tokens). Measure time and credits.
+- **Budget (measured, Slack 2026-11-09):** ~10s, 5 search + 2 extract credits (≈ 140 Guides/month on Tavily's free 1,000), 4 LLM calls, ~14K input tokens, $0.
 
 ### Stage 4: Quote check (`lib/agent/quotecheck.ts`)
 - Normalize text, then require an exact substring or a fuzzy ratio ≥ 0.9.

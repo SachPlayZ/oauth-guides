@@ -21,7 +21,6 @@ export const MODELS = {
 };
 
 const REQUEST_TIMEOUT_MS = 30_000;
-const MAX_WAIT_MS = 20_000; // longest we wait for a per-minute limit to reset
 /** Rough budget for one request (prompt + output) under an 8K tokens/minute limit. */
 export const MAX_REQUEST_TOKENS = 6_500;
 export const estimateTokens = (s: string) => Math.ceil(s.length / 4);
@@ -51,6 +50,32 @@ class LlmError extends Error {
 
 const exhausted = new Set<string>(); // models out of their daily quota for this process
 
+// Per-model token window, read from rate-limit headers. Lets parallel calls spread across models
+// instead of all hitting the same one and waiting.
+const windows = new Map<string, { remaining: number; resetAt: number }>();
+const MAX_TOTAL_WAIT_MS = 90_000;
+
+/** "1m2.5s" | "4.2s" | "250ms" → ms */
+export function parseDuration(s: string | null | undefined): number | null {
+  if (!s) return null;
+  const parts = [...s.matchAll(/([\d.]+)(ms|s|m|h)/g)];
+  if (!parts.length) return null;
+  const unit = { ms: 1, s: 1_000, m: 60_000, h: 3_600_000 } as const;
+  return parts.reduce((ms, [, n, u]) => ms + Number(n) * unit[u as keyof typeof unit], 0);
+}
+
+function noteWindow(model: string, headers: Headers) {
+  const remaining = Number(headers.get("x-ratelimit-remaining-tokens"));
+  const reset = parseDuration(headers.get("x-ratelimit-reset-tokens"));
+  if (headers.has("x-ratelimit-remaining-tokens") && Number.isFinite(remaining))
+    windows.set(model, { remaining, resetAt: Date.now() + (reset ?? 60_000) });
+}
+
+const hasRoom = (model: string, need: number) => {
+  const w = windows.get(model);
+  return !w || w.remaining >= need || Date.now() >= w.resetAt;
+};
+
 async function chatOnce(model: string, body: object): Promise<ChatResponse> {
   const [provider, ...rest] = model.split(":");
   const p = PROVIDERS[provider];
@@ -64,53 +89,62 @@ async function chatOnce(model: string, body: object): Promise<ChatResponse> {
     body: JSON.stringify({ ...body, model: id, ...(id.includes("gpt-oss") ? { reasoning_effort: "low" } : {}) }),
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
+  noteWindow(model, res.headers);
   if (!res.ok) {
     const text = await res.text();
     const retryAfter = Number(res.headers.get("retry-after"));
-    throw new LlmError(`${model} → HTTP ${res.status}: ${text.slice(0, 300)}`, res.status, Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : null);
+    const hinted = parseDuration(/try again in ([\d.msh]+)/.exec(text)?.[1]);
+    throw new LlmError(`${model} → HTTP ${res.status}: ${text.slice(0, 300)}`, res.status, hinted ?? (retryAfter > 0 ? retryAfter * 1000 : null));
   }
   return res.json() as Promise<ChatResponse>;
 }
 
 /**
- * Try each model in turn. Per-minute limits move on to the next model; if every model is
- * waiting on one, sleep for the shortest reset (≤ 20s) and go round again. Daily limits
- * drop the model for the rest of the process. `state.index` keeps a loop on one model.
+ * Send to the first model in the chain with token headroom; if none has room, wait for the
+ * soonest reset (≤ 90s in all). Daily limits drop the model for the process; a 400/5xx/timeout
+ * moves to the next model for this call. `state.index` keeps a conversation on one model.
  */
-async function chat(models: string[], body: object, state = { index: 0 }, usage?: Usage): Promise<ChatResponse> {
+async function chat(models: string[], body: { max_tokens?: number; [k: string]: unknown }, state = { index: 0 }, usage?: Usage): Promise<ChatResponse> {
+  const need = estimateTokens(JSON.stringify(body)) + Math.min(body.max_tokens ?? 1_000, 1_000);
+  const giveUpAt = Date.now() + MAX_TOTAL_WAIT_MS;
+  const failed = new Set<string>();
   let lastError: unknown;
-  for (let round = 0; round < 3; round++) {
-    let shortestWait = Infinity;
-    for (let k = 0; k < models.length; k++) {
-      const i = (state.index + k) % models.length;
-      if (exhausted.has(models[i])) continue;
-      try {
-        const res = await chatOnce(models[i], body);
-        state.index = i;
-        if (usage) {
-          usage.calls += 1;
-          usage.inputTokens += res.usage?.prompt_tokens ?? 0;
-          usage.outputTokens += res.usage?.completion_tokens ?? 0;
-        }
-        return res;
-      } catch (e) {
-        lastError = e;
-        if (process.env.DEBUG_LLM) console.error(`[llm] ${models[i]} →`, (e as Error).message.slice(0, 200));
-        if (!(e instanceof LlmError)) {
-          if ((e as Error).name === "TimeoutError") continue;
-          throw e;
-        }
-        if (e.status === 429 && /per day|\bTPD\b|\bRPD\b/i.test(e.message)) exhausted.add(models[i]);
-        else if (e.status === 429) shortestWait = Math.min(shortestWait, e.retryAfterMs ?? 5000);
-        else if (e.status === 413) throw new Error(`Request too large for ${models[i]}; trim the prompt. ${e.message}`);
-        else if (e.status >= 500 || e.status === 400) continue; // 400: e.g. a malformed tool call; another model may do better
-        else throw e;
-      }
+  for (;;) {
+    const live = models.map((_, k) => models[(state.index + k) % models.length]).filter((m) => !exhausted.has(m) && !failed.has(m));
+    if (!live.length) break;
+    const model = live.find((m) => hasRoom(m, need));
+    if (!model) {
+      const wait = Math.min(...live.map((m) => windows.get(m)!.resetAt)) - Date.now() + 250;
+      if (Date.now() + wait > giveUpAt) break;
+      if (process.env.DEBUG_LLM) console.error(`[llm] all models busy, waiting ${(wait / 1000).toFixed(1)}s`);
+      await new Promise((r) => setTimeout(r, Math.max(wait, 250)));
+      continue;
     }
-    if (!Number.isFinite(shortestWait) || shortestWait > MAX_WAIT_MS) break;
-    await new Promise((r) => setTimeout(r, shortestWait));
+    const w = windows.get(model);
+    if (w) w.remaining -= need; // reserve, so concurrent calls pick other models
+    try {
+      const res = await chatOnce(model, body);
+      state.index = models.indexOf(model);
+      if (usage) {
+        usage.calls += 1;
+        usage.inputTokens += res.usage?.prompt_tokens ?? 0;
+        usage.outputTokens += res.usage?.completion_tokens ?? 0;
+      }
+      return res;
+    } catch (e) {
+      lastError = e;
+      if (process.env.DEBUG_LLM) console.error(`[llm]`, (e as Error).message.slice(0, 160));
+      if (!(e instanceof LlmError)) {
+        if ((e as Error).name === "TimeoutError") failed.add(model);
+        else throw e;
+      } else if (e.status === 429 && /per day|\bTPD\b|\bRPD\b/i.test(e.message)) exhausted.add(model);
+      else if (e.status === 429) windows.set(model, { remaining: 0, resetAt: Date.now() + (e.retryAfterMs ?? 5_000) });
+      else if (e.status === 413) throw new Error(`Request too large for ${model}; trim the prompt. ${e.message}`);
+      else if (e.status >= 500 || e.status === 400) failed.add(model); // 400: e.g. a malformed tool call; another model may do better
+      else throw e;
+    }
   }
-  throw new Error(`All models failed (${models.join(", ")}): ${(lastError as Error)?.message ?? lastError}`);
+  throw new Error(`All models failed (${models.join(", ")}): ${(lastError as Error)?.message ?? "rate limited"}`);
 }
 
 const jsonSchemaOf = (schema: z.ZodType) => JSON.stringify(z.toJSONSchema(schema, { unrepresentable: "any" }));
