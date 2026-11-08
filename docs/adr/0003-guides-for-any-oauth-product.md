@@ -1,0 +1,3 @@
+# Guides cover any Provider product, and a Composio Toolkit is optional
+
+This supersedes ADR-0002. The brief requires live generation "including for apps outside the existing library," and reviewers will submit an unfamiliar app. Refusing anything that isn't a Composio Toolkit would make that demo fail. A Guide's subject is now a Provider product. When a matching Toolkit exists, the Guide includes the Composio section (callback URL, Auth config, migration gotcha). When none exists, the Guide says so and its steps end at "OAuth app ready." Resolving a query searches Composio first, then falls back to one LLM web-search call to tell ambiguous names apart.
