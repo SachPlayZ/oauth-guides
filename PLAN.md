@@ -516,7 +516,7 @@ docs/adr/  GLOSSARY.md  BRIEF.md  README.md  PLAN.md  .env.example
 
 | Product | Expected level of default row | Why |
 |---|---|---|
-| GitHub | R0 | Baseline |
+| GitHub | R1 (org repos need org owner approval; sign-in is R0) | Baseline |
 | Slack | R2 (read history: non-Marketplace Blocking limit) | Self-serve OAuth, but rate limits gate agents |
 | Gmail | R4 (restricted scopes → CASA) | Level depends on the Usage row |
 | Notion | R0–R1 | Listing review vs. production confusion |
@@ -531,7 +531,7 @@ Everything else in the directory shows "Not generated yet → Generate".
 |---|---|---|---|
 | M0 | Scaffold: Next.js, Tailwind, shadcn, Drizzle, Neon, env | 0:15 | `pnpm dev` runs; DB connected; `.env.example` committed; `.env*` gitignored |
 | M1 | **Setup agent attempts** (§17): GitHub, Slack, Google | 1:00 | `evidence/<slug>/attempt.md` × 3 with timings, screenshots, Takeover points, and the review screen's demands |
-| M2 | `schema.ts` + `rubric.ts` + tests + hand-written GitHub JSON | 0:30 | Zod validates. Rubric tests: GitHub → R0; Gmail read → R4; one unknown gate → range + low confidence; Slack history Blocking limit → R2 |
+| M2 | `schema.ts` + `rubric.ts` + tests + hand-written GitHub JSON | 0:30 | Zod validates. Rubric tests: GitHub sign-in → R0, org repos → R1 (org admin consent); Gmail read → R4; one unknown gate → range + low confidence; Slack history Blocking limit → R2 |
 | M3a | Resolve (Composio, then LLM fallback) + probes + Composio lookup | 0:40 | "Box" → candidates; "asdfgh" → not found; a non-Toolkit product resolves; `probes("slack.com")` returns a result or a clear "not found" |
 | M3b | Research loop with events | 0:50 | A Slack run logs ≥ 6 findings with URLs and quotes, answering every Gate question, within 150s |
 | M3c | Quote check, synthesize, verify, rubric, persist | 0:50 | A Notion run ends with a zod-valid Guide version; levels and confidence computed; ≥ 1 unknown listed |
