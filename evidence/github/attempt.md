@@ -3,7 +3,7 @@
 - **Date:** 2026-11-10, 03:04:04–03:06:40 local (2 min 36 s end to end)
 - **Setup agent:** Claude Code driving the Claude desktop app's built-in browser. Claude in Chrome was not available on this machine.
 - **Goal:** create a GitHub OAuth app wired to Composio's callback, and observe where the agent must hand over to the developer.
-- **Not recorded here:** the client ID and client secret. The secret was never read by the agent. The test app is to be deleted after the attempt.
+- **Not recorded here:** the client ID and client secret. The secret was never read by the agent. The test app was deleted right after the attempt (2026-11-10).
 
 ## Timeline
 
