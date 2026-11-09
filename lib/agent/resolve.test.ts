@@ -31,6 +31,13 @@ describe("matchToolkits", () => {
   it("URL resolves via slug or app_url domain", () => {
     expect(matchToolkits("https://linear.app", items)).toMatchObject({ kind: "resolved", product: { slug: "linear" } });
   });
+  it("URL shared by two Toolkits → the one named like the domain", () => {
+    const withMcp = [...items, tk("linear_mcp", "Linear MCP", "https://linear.app")];
+    expect(matchToolkits("https://linear.app", withMcp)).toMatchObject({ kind: "resolved", product: { slug: "linear" } });
+  });
+  it("Composio's own site as app_url → no domain", () => {
+    expect(matchToolkits("Tavily", [tk("tavily", "Tavily", "https://composio.dev")])).toMatchObject({ kind: "resolved", product: { domain: null, productUrl: null } });
+  });
   it("vague name → candidates, never a guess", () => {
     const r = matchToolkits("google", items);
     expect(r?.kind).toBe("candidates");

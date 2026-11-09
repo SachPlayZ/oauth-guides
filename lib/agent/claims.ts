@@ -1,4 +1,4 @@
-import type { ToolkitDetail } from "../composio";
+import { isOAuthScheme, type ToolkitDetail } from "../composio";
 import { describeProbe, type Probe } from "../probes";
 import type { Claim } from "../schema";
 import { checkQuote } from "./quotecheck";
@@ -74,7 +74,15 @@ export function composioClaims(t: ToolkitDetail): Claim[] {
   });
   return [
     mk("k1", `Composio's ${t.name} Toolkit supports ${t.authSchemes.join(", ") || "no listed"} auth.`, `auth_schemes: ${t.authSchemes.join(", ")}`),
-    mk("k2", t.managedAuthAvailable ? `Composio offers managed auth for ${t.name}.` : `Composio has no managed auth for ${t.name}; you need your own OAuth app.`, `managed auth: ${t.managedAuthAvailable}`),
+    mk(
+      "k2",
+      t.managedAuthAvailable
+        ? `Composio offers managed auth for ${t.name}.`
+        : t.authSchemes.some(isOAuthScheme)
+          ? `Composio has no managed auth for ${t.name}; you need your own OAuth app.`
+          : `Composio's ${t.name} Toolkit connects with ${t.authSchemes.join(", ") || "no listed scheme"}, not OAuth; an OAuth app only matters outside Composio.`,
+      `managed auth: ${t.managedAuthAvailable}`,
+    ),
     mk("k3", `Register ${COMPOSIO_CALLBACK_URL} as the redirect URI (it stays on /api/v3/ even though the REST API is v3.1).`, `Register \`${COMPOSIO_CALLBACK_URL}\` as the provider's authorized redirect URI.`, COMPOSIO_WHITE_LABEL_DOC, "Hand-verified"),
     mk("k4", "Switching to your own auth config doesn't move existing connected accounts; users reconnect, or you import their credentials where supported.", "Existing connected accounts are tied to the auth config they were created with.", COMPOSIO_WHITE_LABEL_DOC, "Hand-verified"),
   ];

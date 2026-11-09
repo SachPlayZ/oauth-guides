@@ -9,7 +9,7 @@ import { computeGuide } from "../rubric";
 import { Guide, type JobEvent } from "../schema";
 import { COMPOSIO_CALLBACK_URL, COMPOSIO_CUSTOM_AUTH_DOC, composioClaims, findingClaims, probeClaims, unanswered } from "./claims";
 import { GATE_QUESTIONS, QUESTIONS, research } from "./research";
-import type { ResolvedProduct } from "./resolve";
+import { type ResolvedProduct, withDomain } from "./resolve";
 import { synthesize } from "./synthesize";
 import { verifyClaims } from "./verify";
 
@@ -23,6 +23,7 @@ export async function generateGuide(product: ResolvedProduct, opts: { emit?: Emi
   const t0 = Date.now();
   const emit: Emit = async (type, payload) => opts.emit?.(type, payload);
   const usage = opts.usage ?? emptyUsage();
+  product = await withDomain(product, usage);
 
   // 1–3: probes, Composio lookup and research in parallel.
   await emit("stage_started", { stage: "research" });

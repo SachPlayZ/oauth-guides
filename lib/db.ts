@@ -1,11 +1,14 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { attachDatabasePool } from "@vercel/functions";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import * as schema from "./dbschema";
 
-const globalForDb = globalThis as unknown as { sql?: postgres.Sql };
+const globalForDb = globalThis as unknown as { pool?: Pool };
 
-// Reuse one pool across hot reloads in dev.
-const sql = globalForDb.sql ?? postgres(process.env.DATABASE_URL!, { max: 5, prepare: false });
-if (process.env.NODE_ENV !== "production") globalForDb.sql = sql;
+// Pooled Neon URL (PgBouncer). Reuse one pool across hot reloads in dev; on Vercel Fluid,
+// attachDatabasePool closes idle clients before a function instance is suspended.
+const pool = globalForDb.pool ?? new Pool({ connectionString: process.env.DATABASE_URL, max: 5 });
+if (process.env.NODE_ENV !== "production") globalForDb.pool = pool;
+attachDatabasePool(pool);
 
-export const db = drizzle(sql, { schema });
+export const db = drizzle(pool, { schema });

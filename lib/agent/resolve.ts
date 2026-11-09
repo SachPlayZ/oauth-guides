@@ -49,12 +49,14 @@ export const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unknown";
 
 function fromToolkit(t: ToolkitSummary): ResolvedProduct {
+  // Some Toolkits list Composio's own site as their app URL (e.g. tavily, discord); that's no product domain.
+  const appUrl = t.appUrl && registrableDomain(t.appUrl) !== "composio.dev" ? t.appUrl : null;
   return {
     slug: t.slug,
     productName: t.name,
     providerName: null,
-    domain: t.appUrl ? registrableDomain(t.appUrl) : null,
-    productUrl: t.appUrl,
+    domain: appUrl ? registrableDomain(appUrl) : null,
+    productUrl: appUrl,
     devPortalUrl: null,
     docsCandidates: t.authGuideUrl ? [t.authGuideUrl] : [],
     toolkitSlug: t.slug,
@@ -78,7 +80,10 @@ export function matchToolkits(query: string, items: ToolkitSummary[]): Resolutio
       norm(t.name) === q ||
       (domain !== null && t.appUrl !== null && registrableDomain(t.appUrl) === domain),
   );
-  if (exact.length === 1) return { kind: "resolved", product: fromToolkit(exact[0]), via: "composio" };
+  // Several Toolkits can share a domain (linear, linear_mcp); the one named like it wins.
+  const named = exact.filter((t) => norm(t.slug) === q || norm(t.name) === q);
+  const one = exact.length === 1 ? exact[0] : named.length === 1 ? named[0] : null;
+  if (one) return { kind: "resolved", product: fromToolkit(one), via: "composio" };
   const partial = exact.length > 1 ? exact : items.filter((t) => norm(t.slug).includes(q) || norm(t.name).includes(q));
   if (partial.length) return { kind: "candidates", candidates: partial.slice(0, 6).map(fromToolkit), via: "composio" };
   return null;
@@ -156,6 +161,16 @@ function toResolution(r: z.infer<typeof WebResolution>): Resolution {
   if (r.status === "resolved" && products.length === 1) return { kind: "resolved", product: products[0], via: "web" };
   if (products.length) return { kind: "candidates", candidates: products, via: "web" };
   return { kind: "not_found", message: "Couldn't identify this app. Try its website." };
+}
+
+/** A Toolkit with no usable app URL gets its domain and portal from the web lookup; Toolkit fields stay. */
+export async function withDomain(product: ResolvedProduct, usage?: Usage): Promise<ResolvedProduct> {
+  if (product.domain) return product;
+  const web = await resolveViaWeb(product.productName, usage).catch(() => null);
+  const found = web?.kind === "resolved" ? web.product : web?.kind === "candidates" ? web.candidates[0] : null;
+  if (!found) return product;
+  const { domain, productUrl, providerName, devPortalUrl, docsCandidates } = found;
+  return { ...product, domain, productUrl, providerName, devPortalUrl, docsCandidates: [...product.docsCandidates, ...docsCandidates] };
 }
 
 export async function resolve(query: string, usage?: Usage): Promise<Resolution> {
