@@ -1,0 +1,802 @@
+[
+  {
+    "slug": "gmail",
+    "name": "Gmail",
+    "appUrl": "https://mail.google.com",
+    "logo": "https://logos.composio.dev/api/gmail",
+    "managedAuth": true,
+    "rank": 1
+  },
+  {
+    "slug": "github",
+    "name": "GitHub",
+    "appUrl": "https://github.com/",
+    "logo": "https://logos.composio.dev/api/github",
+    "managedAuth": true,
+    "rank": 2
+  },
+  {
+    "slug": "googlecalendar",
+    "name": "Google Calendar",
+    "appUrl": "https://calendar.google.com",
+    "logo": "https://logos.composio.dev/api/googlecalendar",
+    "managedAuth": true,
+    "rank": 3
+  },
+  {
+    "slug": "notion",
+    "name": "Notion",
+    "appUrl": "https://www.notion.so",
+    "logo": "https://logos.composio.dev/api/notion",
+    "managedAuth": true,
+    "rank": 4
+  },
+  {
+    "slug": "googlesheets",
+    "name": "Google Sheets",
+    "appUrl": "https://sheets.google.com/",
+    "logo": "https://logos.composio.dev/api/googlesheets",
+    "managedAuth": true,
+    "rank": 5
+  },
+  {
+    "slug": "slack",
+    "name": "Slack",
+    "appUrl": "https://slack.com/intl/en-in//",
+    "logo": "https://logos.composio.dev/api/slack",
+    "managedAuth": true,
+    "rank": 6
+  },
+  {
+    "slug": "supabase",
+    "name": "Supabase",
+    "appUrl": "https://supabase.com",
+    "logo": "https://logos.composio.dev/api/supabase",
+    "managedAuth": true,
+    "rank": 7
+  },
+  {
+    "slug": "outlook",
+    "name": "Outlook",
+    "appUrl": "https://www.microsoft.com/en-in/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook",
+    "logo": "https://logos.composio.dev/api/outlook",
+    "managedAuth": true,
+    "rank": 8
+  },
+  {
+    "slug": "twitter",
+    "name": "Twitter",
+    "appUrl": "https://x.com",
+    "logo": "https://logos.composio.dev/api/twitter",
+    "managedAuth": false,
+    "rank": 9
+  },
+  {
+    "slug": "googledrive",
+    "name": "Google Drive",
+    "appUrl": "https://drive.google.com",
+    "logo": "https://logos.composio.dev/api/googledrive",
+    "managedAuth": true,
+    "rank": 10
+  },
+  {
+    "slug": "googledocs",
+    "name": "Google Docs",
+    "appUrl": "https://docs.google.com",
+    "logo": "https://logos.composio.dev/api/googledocs",
+    "managedAuth": true,
+    "rank": 11
+  },
+  {
+    "slug": "hubspot",
+    "name": "HubSpot",
+    "appUrl": "https://www.hubspot.com/",
+    "logo": "https://logos.composio.dev/api/hubspot",
+    "managedAuth": true,
+    "rank": 12
+  },
+  {
+    "slug": "linear",
+    "name": "Linear",
+    "appUrl": "https://linear.app",
+    "logo": "https://logos.composio.dev/api/linear",
+    "managedAuth": true,
+    "rank": 13
+  },
+  {
+    "slug": "airtable",
+    "name": "Airtable",
+    "appUrl": "https://www.airtable.com/",
+    "logo": "https://logos.composio.dev/api/airtable",
+    "managedAuth": true,
+    "rank": 14
+  },
+  {
+    "slug": "jira",
+    "name": "Jira",
+    "appUrl": "https://www.atlassian.com/software/jira",
+    "logo": "https://logos.composio.dev/api/jira",
+    "managedAuth": true,
+    "rank": 15
+  },
+  {
+    "slug": "youtube",
+    "name": "YouTube",
+    "appUrl": "https://www.youtube.com",
+    "logo": "https://logos.composio.dev/api/youtube",
+    "managedAuth": true,
+    "rank": 16
+  },
+  {
+    "slug": "slackbot",
+    "name": "Slackbot",
+    "appUrl": "https://slack.com/intl/en-in/",
+    "logo": "https://logos.composio.dev/api/slackbot",
+    "managedAuth": true,
+    "rank": 17
+  },
+  {
+    "slug": "canvas",
+    "name": "Canvas",
+    "appUrl": "https://www.instructure.com/canvas",
+    "logo": "https://logos.composio.dev/api/canvas",
+    "managedAuth": false,
+    "rank": 18
+  },
+  {
+    "slug": "bitbucket",
+    "name": "Bitbucket",
+    "appUrl": "https://bitbucket.org/",
+    "logo": "https://logos.composio.dev/api/bitbucket",
+    "managedAuth": true,
+    "rank": 19
+  },
+  {
+    "slug": "googletasks",
+    "name": "Google Tasks",
+    "appUrl": "https://tasks.google.com/tasks/",
+    "logo": "https://logos.composio.dev/api/googletasks",
+    "managedAuth": true,
+    "rank": 20
+  },
+  {
+    "slug": "discord",
+    "name": "Discord",
+    "appUrl": "https://composio.dev",
+    "logo": "https://logos.composio.dev/api/discord",
+    "managedAuth": true,
+    "rank": 21
+  },
+  {
+    "slug": "figma",
+    "name": "Figma",
+    "appUrl": "https://www.figma.com/",
+    "logo": "https://logos.composio.dev/api/figma",
+    "managedAuth": true,
+    "rank": 22
+  },
+  {
+    "slug": "reddit",
+    "name": "Reddit",
+    "appUrl": "https://www.reddit.com",
+    "logo": "https://logos.composio.dev/api/reddit",
+    "managedAuth": true,
+    "rank": 23
+  },
+  {
+    "slug": "cal",
+    "name": "Cal",
+    "appUrl": "https://cal.com",
+    "logo": "https://logos.composio.dev/api/cal",
+    "managedAuth": true,
+    "rank": 24
+  },
+  {
+    "slug": "wrike",
+    "name": "Wrike",
+    "appUrl": "https://www.wrike.com",
+    "logo": "https://logos.composio.dev/api/wrike",
+    "managedAuth": true,
+    "rank": 25
+  },
+  {
+    "slug": "sentry",
+    "name": "Sentry",
+    "appUrl": "https://sentry.io/welcome/",
+    "logo": "https://logos.composio.dev/api/sentry",
+    "managedAuth": true,
+    "rank": 26
+  },
+  {
+    "slug": "snowflake",
+    "name": "Snowflake",
+    "appUrl": "https://www.snowflake.com/en/",
+    "logo": "https://logos.composio.dev/api/snowflake",
+    "managedAuth": false,
+    "rank": 27
+  },
+  {
+    "slug": "microsoft_teams",
+    "name": "Microsoft Teams",
+    "appUrl": "https://www.microsoft.com/",
+    "logo": "https://logos.composio.dev/api/microsoft_teams",
+    "managedAuth": true,
+    "rank": 28
+  },
+  {
+    "slug": "asana",
+    "name": "Asana",
+    "appUrl": "https://asana.com/",
+    "logo": "https://logos.composio.dev/api/asana",
+    "managedAuth": true,
+    "rank": 29
+  },
+  {
+    "slug": "shopify",
+    "name": "Shopify",
+    "appUrl": "https://www.shopify.com",
+    "logo": "https://logos.composio.dev/api/shopify",
+    "managedAuth": false,
+    "rank": 30
+  },
+  {
+    "slug": "linkedin",
+    "name": "LinkedIn",
+    "appUrl": "https://linkedin.com/",
+    "logo": "https://logos.composio.dev/api/linkedin",
+    "managedAuth": true,
+    "rank": 31
+  },
+  {
+    "slug": "google_maps",
+    "name": "Google Maps",
+    "appUrl": "https://www.google.com/maps",
+    "logo": "https://logos.composio.dev/api/google_maps",
+    "managedAuth": true,
+    "rank": 32
+  },
+  {
+    "slug": "one_drive",
+    "name": "OneDrive",
+    "appUrl": "https://www.microsoft.com/en-in/microsoft-365/onedrive/online-cloud-storage/",
+    "logo": "https://logos.composio.dev/api/one_drive",
+    "managedAuth": true,
+    "rank": 33
+  },
+  {
+    "slug": "docusign",
+    "name": "DocuSign",
+    "appUrl": "https://www.docusign.com",
+    "logo": "https://logos.composio.dev/api/docusign",
+    "managedAuth": false,
+    "rank": 34
+  },
+  {
+    "slug": "discordbot",
+    "name": "Discord Bot",
+    "appUrl": "https://discord.com/",
+    "logo": "https://logos.composio.dev/api/discordbot",
+    "managedAuth": true,
+    "rank": 35
+  },
+  {
+    "slug": "salesforce",
+    "name": "Salesforce",
+    "appUrl": "https://www.salesforce.com/in/",
+    "logo": "https://logos.composio.dev/api/salesforce",
+    "managedAuth": true,
+    "rank": 36
+  },
+  {
+    "slug": "calendly",
+    "name": "Calendly",
+    "appUrl": "https://calendly.com/",
+    "logo": "https://logos.composio.dev/api/calendly",
+    "managedAuth": true,
+    "rank": 37
+  },
+  {
+    "slug": "trello",
+    "name": "Trello",
+    "appUrl": "https://trello.com",
+    "logo": "https://logos.composio.dev/api/trello",
+    "managedAuth": true,
+    "rank": 38
+  },
+  {
+    "slug": "neon",
+    "name": "Neon",
+    "appUrl": "https://neon.tech/",
+    "logo": "https://logos.composio.dev/api/neon",
+    "managedAuth": false,
+    "rank": 39
+  },
+  {
+    "slug": "clickup",
+    "name": "ClickUp",
+    "appUrl": "https://clickup.com",
+    "logo": "https://logos.composio.dev/api/clickup",
+    "managedAuth": true,
+    "rank": 40
+  },
+  {
+    "slug": "brevo",
+    "name": "Brevo",
+    "appUrl": "https://www.brevo.com",
+    "logo": "https://logos.composio.dev/api/brevo",
+    "managedAuth": false,
+    "rank": 41
+  },
+  {
+    "slug": "stripe",
+    "name": "Stripe",
+    "appUrl": "https://stripe.com",
+    "logo": "https://logos.composio.dev/api/stripe",
+    "managedAuth": true,
+    "rank": 42
+  },
+  {
+    "slug": "klaviyo",
+    "name": "Klaviyo",
+    "appUrl": "https://www.klaviyo.com/",
+    "logo": "https://logos.composio.dev/api/klaviyo",
+    "managedAuth": false,
+    "rank": 43
+  },
+  {
+    "slug": "mailchimp",
+    "name": "Mailchimp",
+    "appUrl": "https://mailchimp.com/",
+    "logo": "https://logos.composio.dev/api/mailchimp",
+    "managedAuth": true,
+    "rank": 44
+  },
+  {
+    "slug": "attio",
+    "name": "Attio",
+    "appUrl": "https://attio.com",
+    "logo": "https://logos.composio.dev/api/attio",
+    "managedAuth": true,
+    "rank": 45
+  },
+  {
+    "slug": "googlemeet",
+    "name": "Google Meet",
+    "appUrl": "https://meet.google.com/",
+    "logo": "https://logos.composio.dev/api/googlemeet",
+    "managedAuth": true,
+    "rank": 46
+  },
+  {
+    "slug": "zoho",
+    "name": "Zoho",
+    "appUrl": "https://www.zoho.com",
+    "logo": "https://logos.composio.dev/api/zoho",
+    "managedAuth": true,
+    "rank": 47
+  },
+  {
+    "slug": "dropbox",
+    "name": "Dropbox",
+    "appUrl": "https://www.dropbox.com",
+    "logo": "https://logos.composio.dev/api/dropbox",
+    "managedAuth": true,
+    "rank": 48
+  },
+  {
+    "slug": "confluence",
+    "name": "Confluence",
+    "appUrl": "https://www.atlassian.com/software/confluence",
+    "logo": "https://logos.composio.dev/api/confluence",
+    "managedAuth": true,
+    "rank": 49
+  },
+  {
+    "slug": "borneo",
+    "name": "Borneo",
+    "appUrl": "https://www.borneo.com",
+    "logo": "https://logos.composio.dev/api/borneo",
+    "managedAuth": false,
+    "rank": 50
+  },
+  {
+    "slug": "ahrefs",
+    "name": "Ahrefs",
+    "appUrl": "https://ahrefs.com/",
+    "logo": "https://logos.composio.dev/api/ahrefs",
+    "managedAuth": false,
+    "rank": 51
+  },
+  {
+    "slug": "googlebigquery",
+    "name": "Google BigQuery",
+    "appUrl": "https://cloud.google.com/bigquery",
+    "logo": "https://logos.composio.dev/api/googlebigquery",
+    "managedAuth": true,
+    "rank": 52
+  },
+  {
+    "slug": "monday",
+    "name": "Monday",
+    "appUrl": "https://monday.com/",
+    "logo": "https://logos.composio.dev/api/monday",
+    "managedAuth": true,
+    "rank": 53
+  },
+  {
+    "slug": "pipedrive",
+    "name": "Pipedrive",
+    "appUrl": "https://www.pipedrive.com/",
+    "logo": "https://logos.composio.dev/api/pipedrive",
+    "managedAuth": false,
+    "rank": 54
+  },
+  {
+    "slug": "bamboohr",
+    "name": "BambooHR",
+    "appUrl": "https://www.bamboohr.com",
+    "logo": "https://logos.composio.dev/api/bamboohr",
+    "managedAuth": false,
+    "rank": 55
+  },
+  {
+    "slug": "whatsapp",
+    "name": "WhatsApp",
+    "appUrl": "https://web.whatsapp.com/",
+    "logo": "https://logos.composio.dev/api/whatsapp",
+    "managedAuth": true,
+    "rank": 56
+  },
+  {
+    "slug": "dynamics365",
+    "name": "Dynamics 365",
+    "appUrl": "https://www.microsoft.com/en-in/",
+    "logo": "https://logos.composio.dev/api/dynamics365",
+    "managedAuth": true,
+    "rank": 57
+  },
+  {
+    "slug": "zendesk",
+    "name": "Zendesk",
+    "appUrl": "https://www.zendesk.com/",
+    "logo": "https://logos.composio.dev/api/zendesk",
+    "managedAuth": true,
+    "rank": 58
+  },
+  {
+    "slug": "googlephotos",
+    "name": "Google Photos",
+    "appUrl": "https://photos.google.com",
+    "logo": "https://logos.composio.dev/api/googlephotos",
+    "managedAuth": true,
+    "rank": 59
+  },
+  {
+    "slug": "metaads",
+    "name": "Meta Ads",
+    "appUrl": "https://business.meta.com/",
+    "logo": "https://logos.composio.dev/api/metaads",
+    "managedAuth": false,
+    "rank": 60
+  },
+  {
+    "slug": "googlesuper",
+    "name": "Google Super",
+    "appUrl": "https://www.google.com/",
+    "logo": "https://logos.composio.dev/api/googlesuper",
+    "managedAuth": true,
+    "rank": 61
+  },
+  {
+    "slug": "zoom",
+    "name": "Zoom",
+    "appUrl": "https://www.zoom.com/",
+    "logo": "https://logos.composio.dev/api/zoom",
+    "managedAuth": true,
+    "rank": 62
+  },
+  {
+    "slug": "servicenow",
+    "name": "ServiceNow",
+    "appUrl": "https://www.servicenow.com",
+    "logo": "https://logos.composio.dev/api/servicenow",
+    "managedAuth": false,
+    "rank": 63
+  },
+  {
+    "slug": "googleads",
+    "name": "Google Ads",
+    "appUrl": "https://composio.dev",
+    "logo": "https://logos.composio.dev/api/googleads",
+    "managedAuth": true,
+    "rank": 64
+  },
+  {
+    "slug": "pagerduty",
+    "name": "PagerDuty",
+    "appUrl": "https://www.pagerduty.com",
+    "logo": "https://logos.composio.dev/api/pagerduty",
+    "managedAuth": true,
+    "rank": 65
+  },
+  {
+    "slug": "toneden",
+    "name": "Toneden",
+    "appUrl": "https://www.toneden.io/",
+    "logo": "https://logos.composio.dev/api/toneden",
+    "managedAuth": false,
+    "rank": 66
+  },
+  {
+    "slug": "miro",
+    "name": "Miro",
+    "appUrl": "https://miro.com/",
+    "logo": "https://logos.composio.dev/api/miro",
+    "managedAuth": true,
+    "rank": 67
+  },
+  {
+    "slug": "share_point",
+    "name": "SharePoint",
+    "appUrl": "https://www.microsoft.com/en-in/microsoft-365/sharepoint/collaboration/",
+    "logo": "https://logos.composio.dev/api/share_point",
+    "managedAuth": true,
+    "rank": 68
+  },
+  {
+    "slug": "launch_darkly",
+    "name": "LaunchDarkly",
+    "appUrl": "https://launchdarkly.com",
+    "logo": "https://logos.composio.dev/api/launch_darkly",
+    "managedAuth": false,
+    "rank": 69
+  },
+  {
+    "slug": "contentful",
+    "name": "Contentful",
+    "appUrl": "https://www.contentful.com/",
+    "logo": "https://logos.composio.dev/api/contentful",
+    "managedAuth": true,
+    "rank": 70
+  },
+  {
+    "slug": "netsuite",
+    "name": "Netsuite",
+    "appUrl": "https://www.netsuite.com",
+    "logo": "https://logos.composio.dev/api/netsuite",
+    "managedAuth": false,
+    "rank": 71
+  },
+  {
+    "slug": "apaleo",
+    "name": "Apaleo",
+    "appUrl": "https://apaleo.com",
+    "logo": "https://logos.composio.dev/api/apaleo",
+    "managedAuth": true,
+    "rank": 72
+  },
+  {
+    "slug": "survey_monkey",
+    "name": "SurveyMonkey",
+    "appUrl": "https://www.surveymonkey.com",
+    "logo": "https://logos.composio.dev/api/survey_monkey",
+    "managedAuth": false,
+    "rank": 73
+  },
+  {
+    "slug": "zoho_books",
+    "name": "Zoho Books",
+    "appUrl": "https://www.zoho.com/us/books/",
+    "logo": "https://logos.composio.dev/api/zoho_books",
+    "managedAuth": true,
+    "rank": 74
+  },
+  {
+    "slug": "zoho_inventory",
+    "name": "Zoho Inventory",
+    "appUrl": "https://www.zoho.com/us/inventory/",
+    "logo": "https://logos.composio.dev/api/zoho_inventory",
+    "managedAuth": true,
+    "rank": 75
+  },
+  {
+    "slug": "facebook",
+    "name": "Facebook",
+    "appUrl": "https://www.facebook.com/",
+    "logo": "https://logos.composio.dev/api/facebook",
+    "managedAuth": true,
+    "rank": 76
+  },
+  {
+    "slug": "front",
+    "name": "Front",
+    "appUrl": "https://frontapp.com",
+    "logo": "https://logos.composio.dev/api/front",
+    "managedAuth": false,
+    "rank": 77
+  },
+  {
+    "slug": "webex",
+    "name": "Webex",
+    "appUrl": "https://www.webex.com/",
+    "logo": "https://logos.composio.dev/api/webex",
+    "managedAuth": true,
+    "rank": 78
+  },
+  {
+    "slug": "canva",
+    "name": "Canva",
+    "appUrl": "https://www.canva.com",
+    "logo": "https://logos.composio.dev/api/canva",
+    "managedAuth": true,
+    "rank": 79
+  },
+  {
+    "slug": "amazon",
+    "name": "Amazon",
+    "appUrl": "https://www.amazon.in/",
+    "logo": "https://logos.composio.dev/api/amazon",
+    "managedAuth": true,
+    "rank": 80
+  },
+  {
+    "slug": "linkhut",
+    "name": "Linkhut",
+    "appUrl": "https://linkhut.org/",
+    "logo": "https://logos.composio.dev/api/linkhut",
+    "managedAuth": true,
+    "rank": 81
+  },
+  {
+    "slug": "dropbox_sign",
+    "name": "Dropbox Sign",
+    "appUrl": "https://sign.dropbox.com",
+    "logo": "https://logos.composio.dev/api/dropbox_sign",
+    "managedAuth": false,
+    "rank": 82
+  },
+  {
+    "slug": "timely",
+    "name": "Timely",
+    "appUrl": "https://www.timelyapp.com",
+    "logo": "https://logos.composio.dev/api/timely",
+    "managedAuth": true,
+    "rank": 83
+  },
+  {
+    "slug": "box",
+    "name": "Box",
+    "appUrl": "https://www.box.com",
+    "logo": "https://logos.composio.dev/api/box",
+    "managedAuth": true,
+    "rank": 84
+  },
+  {
+    "slug": "productboard",
+    "name": "Productboard",
+    "appUrl": "https://www.productboard.com",
+    "logo": "https://logos.composio.dev/api/productboard",
+    "managedAuth": true,
+    "rank": 85
+  },
+  {
+    "slug": "blackbaud",
+    "name": "Blackbaud",
+    "appUrl": "https://www.blackbaud.com/",
+    "logo": "https://logos.composio.dev/api/blackbaud",
+    "managedAuth": true,
+    "rank": 86
+  },
+  {
+    "slug": "webflow",
+    "name": "Webflow",
+    "appUrl": "https://webflow.com",
+    "logo": "https://logos.composio.dev/api/webflow",
+    "managedAuth": false,
+    "rank": 87
+  },
+  {
+    "slug": "freshbooks",
+    "name": "FreshBooks",
+    "appUrl": "https://www.freshbooks.com/signup",
+    "logo": "https://logos.composio.dev/api/freshbooks",
+    "managedAuth": true,
+    "rank": 88
+  },
+  {
+    "slug": "d2lbrightspace",
+    "name": "D2L Brightspace",
+    "appUrl": "https://www.d2l.com/brightspace/",
+    "logo": "https://logos.composio.dev/api/d2lbrightspace",
+    "managedAuth": false,
+    "rank": 89
+  },
+  {
+    "slug": "blackboard",
+    "name": "Blackboard",
+    "appUrl": "https://www.blackboard.com",
+    "logo": "https://logos.composio.dev/api/blackboard",
+    "managedAuth": false,
+    "rank": 90
+  },
+  {
+    "slug": "lever",
+    "name": "Lever",
+    "appUrl": "https://www.lever.co",
+    "logo": "https://logos.composio.dev/api/lever",
+    "managedAuth": false,
+    "rank": 91
+  },
+  {
+    "slug": "zoho_bigin",
+    "name": "Zoho Bigin",
+    "appUrl": "https://www.bigin.com",
+    "logo": "https://logos.composio.dev/api/zoho_bigin",
+    "managedAuth": true,
+    "rank": 92
+  },
+  {
+    "slug": "gorgias",
+    "name": "Gorgias",
+    "appUrl": "https://www.gorgias.com",
+    "logo": "https://logos.composio.dev/api/gorgias",
+    "managedAuth": true,
+    "rank": 93
+  },
+  {
+    "slug": "google_analytics",
+    "name": "Google Analytics",
+    "appUrl": "https://analytics.google.com",
+    "logo": "https://logos.composio.dev/api/google_analytics",
+    "managedAuth": true,
+    "rank": 94
+  },
+  {
+    "slug": "todoist",
+    "name": "Todoist",
+    "appUrl": "https://www.todoist.com/",
+    "logo": "https://logos.composio.dev/api/todoist",
+    "managedAuth": true,
+    "rank": 95
+  },
+  {
+    "slug": "zoho_desk",
+    "name": "Zoho Desk",
+    "appUrl": "https://www.zoho.com/desk",
+    "logo": "https://logos.composio.dev/api/zoho_desk",
+    "managedAuth": true,
+    "rank": 96
+  },
+  {
+    "slug": "square",
+    "name": "Square",
+    "appUrl": "https://squareup.com",
+    "logo": "https://logos.composio.dev/api/square",
+    "managedAuth": true,
+    "rank": 97
+  },
+  {
+    "slug": "yandex",
+    "name": "Yandex",
+    "appUrl": "https://yandex.com/",
+    "logo": "https://logos.composio.dev/api/yandex",
+    "managedAuth": true,
+    "rank": 98
+  },
+  {
+    "slug": "dialpad",
+    "name": "Dialpad",
+    "appUrl": "https://www.dialpad.com/",
+    "logo": "https://logos.composio.dev/api/dialpad",
+    "managedAuth": true,
+    "rank": 99
+  },
+  {
+    "slug": "ynab",
+    "name": "YNAB",
+    "appUrl": "https://www.ynab.com",
+    "logo": "https://logos.composio.dev/api/ynab",
+    "managedAuth": true,
+    "rank": 100
+  }
+]
