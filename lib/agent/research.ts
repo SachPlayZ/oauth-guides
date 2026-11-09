@@ -82,7 +82,7 @@ const EVIDENCE_CHARS = 13_000; // ~3.3K tokens per extraction call
 
 // Providers often split docs across sibling domains (slack.com / slack.dev, notion.so / notion.com).
 // Same name on a mainstream TLD counts as official; blogs like slack.green don't.
-const SIBLING_TLDS = new Set(["com", "dev", "so", "io", "app", "co", "net", "org", "cloud"]);
+const SIBLING_TLDS = new Set(["com", "dev", "so", "io", "app", "co", "net", "org", "cloud", "us", "ai"]);
 
 function officialDomains(p: ResolvedProduct) {
   const ds = [p.domain, p.devPortalUrl, ...p.docsCandidates].map((u) => (u ? registrableDomain(u) : null));
