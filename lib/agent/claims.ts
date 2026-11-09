@@ -57,21 +57,26 @@ export function probeClaims(probes: Probe[]): Claim[] {
     }));
 }
 
-export const COMPOSIO_CUSTOM_AUTH_DOC = "https://docs.composio.dev/docs/using-custom-auth-configuration";
+// Hand-verified 2026-11-09 (verification/LOG.md).
+export const COMPOSIO_CUSTOM_AUTH_DOC = "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app";
+const COMPOSIO_WHITE_LABEL_DOC = "https://docs.composio.dev/docs/authentication/white-labeling-authentication";
+export const COMPOSIO_CALLBACK_URL = "https://backend.composio.dev/api/v3/toolkits/auth/callback";
 
 export function composioClaims(t: ToolkitDetail): Claim[] {
   const url = t.authGuideUrl ?? COMPOSIO_CUSTOM_AUTH_DOC;
-  const mk = (id: string, text: string, quote: string): Claim => ({
+  const mk = (id: string, text: string, quote: string, source = url, note = "From the Composio Toolkits API"): Claim => ({
     id,
     text,
     evidence: "documented",
-    sources: [{ url, quote, official: true, retrievedAt: today() }],
-    verifier: { status: "supported", note: "From the Composio Toolkits API" },
+    sources: [{ url: source, quote, official: true, retrievedAt: today() }],
+    verifier: { status: "supported", note },
     checkedAt: today(),
   });
   return [
     mk("k1", `Composio's ${t.name} Toolkit supports ${t.authSchemes.join(", ") || "no listed"} auth.`, `auth_schemes: ${t.authSchemes.join(", ")}`),
     mk("k2", t.managedAuthAvailable ? `Composio offers managed auth for ${t.name}.` : `Composio has no managed auth for ${t.name}; you need your own OAuth app.`, `managed auth: ${t.managedAuthAvailable}`),
+    mk("k3", `Register ${COMPOSIO_CALLBACK_URL} as the redirect URI (it stays on /api/v3/ even though the REST API is v3.1).`, `Register \`${COMPOSIO_CALLBACK_URL}\` as the provider's authorized redirect URI.`, COMPOSIO_WHITE_LABEL_DOC, "Hand-verified"),
+    mk("k4", "Switching to your own auth config doesn't move existing connected accounts; users reconnect, or you import their credentials where supported.", "Existing connected accounts are tied to the auth config they were created with.", COMPOSIO_WHITE_LABEL_DOC, "Hand-verified"),
   ];
 }
 

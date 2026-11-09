@@ -1,0 +1,839 @@
+{
+  "slug": "gmail",
+  "productName": "Gmail",
+  "providerName": "Google",
+  "productUrl": "https://mail.google.com",
+  "devPortalUrl": "https://console.cloud.google.com/auth/overview",
+  "oauth": {
+    "supported": true,
+    "protocol": "oidc",
+    "pkce": "supported",
+    "discoveryUrl": "https://accounts.google.com/.well-known/openid-configuration",
+    "dynamicClientRegistration": false,
+    "alternatives": [
+      "Service account with domain-wide delegation (Workspace admins, own domain only)"
+    ],
+    "claimIds": [
+      "p1"
+    ]
+  },
+  "composio": {
+    "toolkitSlug": "gmail",
+    "managedAuthAvailable": true,
+    "authSchemes": [
+      "OAUTH2"
+    ],
+    "callbackUrl": "https://backend.composio.dev/api/v3/toolkits/auth/callback",
+    "authGuideUrl": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+    "claimIds": [
+      "k1",
+      "k2",
+      "k3"
+    ]
+  },
+  "usageRows": [
+    {
+      "id": "read_send",
+      "usage": "Read, label & send email",
+      "exampleScopes": [
+        "gmail.modify"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "no",
+          "claimIds": [
+            "g4",
+            "g5"
+          ]
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "no",
+          "claimIds": [
+            "g4",
+            "g5"
+          ]
+        },
+        {
+          "key": "security_assessment",
+          "answer": "yes",
+          "claimIds": [
+            "g2",
+            "g1"
+          ]
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "yes",
+          "claimIds": [
+            "g3"
+          ]
+        },
+        {
+          "key": "domain_verification",
+          "answer": "yes",
+          "claimIds": [
+            "g9"
+          ]
+        },
+        {
+          "key": "scope_verification",
+          "answer": "yes",
+          "claimIds": [
+            "g4",
+            "g5"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "yes",
+          "claimIds": [
+            "g8"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [
+        {
+          "key": "privacy_policy",
+          "label": "Privacy policy on a domain you own",
+          "claimIds": [
+            "g9"
+          ]
+        },
+        {
+          "key": "homepage",
+          "label": "Public home page on a domain you own",
+          "claimIds": [
+            "g9"
+          ]
+        }
+      ],
+      "blockingLimits": [],
+      "artifacts": [
+        {
+          "key": "demo_video",
+          "label": "Unlisted YouTube demo of consent and each scope",
+          "estMinutes": 60,
+          "claimIds": [
+            "g5"
+          ]
+        },
+        {
+          "key": "scope_justification",
+          "label": "Justification for each restricted scope",
+          "estMinutes": 30,
+          "claimIds": [
+            "g4"
+          ]
+        },
+        {
+          "key": "security_questionnaire",
+          "label": "CASA assessment with an authorized lab",
+          "estMinutes": 480,
+          "claimIds": [
+            "g2"
+          ]
+        }
+      ],
+      "notes": "gmail.modify is restricted: verification plus an annual third-party security assessment."
+    },
+    {
+      "id": "send_only",
+      "usage": "Send email only",
+      "exampleScopes": [
+        "gmail.send"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "no",
+          "claimIds": [
+            "g4",
+            "g5"
+          ]
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "no",
+          "claimIds": [
+            "g4",
+            "g5"
+          ]
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "yes",
+          "claimIds": [
+            "g3"
+          ]
+        },
+        {
+          "key": "domain_verification",
+          "answer": "yes",
+          "claimIds": [
+            "g9"
+          ]
+        },
+        {
+          "key": "scope_verification",
+          "answer": "yes",
+          "claimIds": [
+            "g4",
+            "g5"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "yes",
+          "claimIds": [
+            "g8"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [
+        {
+          "key": "privacy_policy",
+          "label": "Privacy policy on a domain you own",
+          "claimIds": [
+            "g9"
+          ]
+        },
+        {
+          "key": "homepage",
+          "label": "Public home page on a domain you own",
+          "claimIds": [
+            "g9"
+          ]
+        }
+      ],
+      "blockingLimits": [],
+      "artifacts": [
+        {
+          "key": "demo_video",
+          "label": "Unlisted YouTube demo of consent and sending",
+          "estMinutes": 60,
+          "claimIds": [
+            "g5"
+          ]
+        }
+      ],
+      "notes": "gmail.send is sensitive, not restricted: scope verification, but Google's pages tie the security assessment to restricted scopes only."
+    },
+    {
+      "id": "signin",
+      "usage": "Sign in with Google",
+      "exampleScopes": [
+        "openid",
+        "email",
+        "profile"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "no",
+          "claimIds": [
+            "g2"
+          ]
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "no",
+          "claimIds": [
+            "g7",
+            "g8"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "no",
+          "claimIds": [
+            "g8"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "Basic scopes skip the unverified-app warning and user cap."
+    }
+  ],
+  "defaultUsageId": "read_send",
+  "defaultUsageReason": {
+    "text": "Email agents read and triage mail, which needs a restricted scope.",
+    "claimIds": [
+      "g1"
+    ]
+  },
+  "verdict": {
+    "oneLiner": "Reading mail means restricted scopes: domain and brand verification, scope verification taking several weeks, and an annual third-party security assessment. Sending only (gmail.send) avoids the assessment.",
+    "approvalWait": null,
+    "costs": [
+      {
+        "text": "Annual CASA assessment by an authorized lab; Google doesn't publish the fees.",
+        "claimIds": [
+          "g2"
+        ]
+      }
+    ]
+  },
+  "preApprovalLimits": [
+    {
+      "text": "Testing: up to 100 test users, and their authorizations expire after 7 days.",
+      "claimIds": [
+        "g6",
+        "g7"
+      ]
+    },
+    {
+      "text": "Unverified in production: warning screen and a lifetime cap of 100 users.",
+      "claimIds": [
+        "g8"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "s1",
+      "phase": "prepare",
+      "title": "Copy the Composio callback URL",
+      "detail": "In Composio: Authentication management → Create Auth Config → Gmail → OAuth2 → Use your own developer credentials. The redirect URI is https://backend.composio.dev/api/v3/toolkits/auth/callback.",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "Sign in to Composio"
+      ],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "k3"
+      ],
+      "url": "https://platform.composio.dev"
+    },
+    {
+      "id": "s2",
+      "phase": "create",
+      "title": "Create a Google Cloud project and branding",
+      "detail": "Google Auth Platform → Branding: app name, support email, home page, privacy policy, authorized domains. Audience: External.",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "Sign in to Google",
+        "Accept Google Cloud terms"
+      ],
+      "estMinutes": 15,
+      "blockers": [],
+      "claimIds": [
+        "g9"
+      ],
+      "url": "https://console.cloud.google.com/auth/branding"
+    },
+    {
+      "id": "s3",
+      "phase": "configure",
+      "title": "Add Gmail scopes and test users",
+      "detail": "Data Access → add the Gmail scopes. Audience → add up to 100 test users.",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 10,
+      "blockers": [],
+      "claimIds": [
+        "g1",
+        "g6"
+      ]
+    },
+    {
+      "id": "s4",
+      "phase": "create",
+      "title": "Create the OAuth client",
+      "detail": "Clients → Create client → Web application. Authorized redirect URI: the Composio callback, or your own domain's forwarder (see gotchas).",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "Reveal the client secret"
+      ],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "k3",
+        "g10"
+      ]
+    },
+    {
+      "id": "s5",
+      "phase": "configure",
+      "title": "Paste the client ID and secret into Composio",
+      "detail": "Copy the client ID and secret into the Composio auth config.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "k3"
+      ]
+    },
+    {
+      "id": "s6",
+      "phase": "test",
+      "title": "Test with a test user",
+      "detail": "Connect a test account and run one Gmail tool. Test grants expire after 7 days.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 10,
+      "blockers": [],
+      "claimIds": [
+        "g7"
+      ]
+    },
+    {
+      "id": "s7",
+      "phase": "prepare",
+      "title": "Verify your domains",
+      "detail": "Verify the home page, privacy policy and redirect domains in Google Search Console.",
+      "owner": "you",
+      "takeoverPoints": [
+        "DNS change at your registrar"
+      ],
+      "estMinutes": 30,
+      "blockers": [],
+      "claimIds": [
+        "g9"
+      ]
+    },
+    {
+      "id": "s8",
+      "phase": "prepare",
+      "title": "Draft justifications and record the demo video",
+      "detail": "Write why each scope is needed and record an unlisted YouTube video of the consent flow and each scope's feature.",
+      "owner": "setup_agent_drafts",
+      "takeoverPoints": [],
+      "estMinutes": 30,
+      "blockers": [],
+      "claimIds": [
+        "g5"
+      ]
+    },
+    {
+      "id": "s9",
+      "phase": "submit",
+      "title": "Publish and submit for verification",
+      "detail": "Audience → Publish app, then submit brand verification and scope verification.",
+      "owner": "you",
+      "takeoverPoints": [
+        "Final submit"
+      ],
+      "estMinutes": 15,
+      "blockers": [],
+      "claimIds": [
+        "g3",
+        "g4"
+      ]
+    },
+    {
+      "id": "s10",
+      "phase": "wait",
+      "title": "Brand and scope verification",
+      "detail": "Brand: about 2-3 business days if reviewed manually. Restricted scopes: several weeks, plus the security assessment.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": null,
+      "blockers": [],
+      "claimIds": [
+        "g3",
+        "g4",
+        "g2"
+      ]
+    }
+  ],
+  "whileYouWait": [
+    {
+      "text": "Keep users on Composio managed auth meanwhile.",
+      "claimIds": [
+        "k2"
+      ]
+    },
+    {
+      "text": "Use up to 100 test users, re-consenting every 7 days.",
+      "claimIds": [
+        "g6",
+        "g7"
+      ]
+    }
+  ],
+  "gotchas": [
+    {
+      "text": "Redirect URI domains must be verified authorized domains, and you can't verify composio.dev. Plan for your own callback domain that 302-forwards to Composio (our inference; test it).",
+      "severity": "blocker",
+      "claimIds": [
+        "g9",
+        "g10"
+      ]
+    },
+    {
+      "text": "Test-user grants expire after 7 days, so long-running agents break in Testing.",
+      "severity": "warn",
+      "claimIds": [
+        "g7"
+      ]
+    },
+    {
+      "text": "Going to production unverified caps the project at 100 users for its lifetime.",
+      "severity": "warn",
+      "claimIds": [
+        "g8"
+      ]
+    },
+    {
+      "text": "Asking only for gmail.send keeps you out of the restricted-scope security assessment.",
+      "severity": "info",
+      "claimIds": [
+        "g1",
+        "g2"
+      ]
+    },
+    {
+      "text": "Switching from managed auth to your own OAuth app doesn't migrate existing connections: users reconnect, or you import their credentials where supported.",
+      "severity": "warn",
+      "claimIds": [
+        "k4"
+      ]
+    }
+  ],
+  "unknowns": [
+    "CASA fees: Google and the App Defense Alliance don't publish them.",
+    "Whether there's a cap on authorized domains per project.",
+    "A numeric duration for restricted scope verification (Google says only 'several weeks').",
+    "Whether a 302 forwarder on your domain satisfies Google's redirect-domain check end to end (not yet tested)."
+  ],
+  "claims": [
+    {
+      "id": "p1",
+      "text": "OAuth discovery found at https://accounts.google.com/.well-known/openid-configuration; PKCE: plain, S256; no dynamic client registration endpoint",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://accounts.google.com/.well-known/openid-configuration",
+          "quote": "{\n \"issuer\": \"https://accounts.google.com\",\n \"authorization_endpoint\": \"https://accounts.google.com/o/oauth2/v2/auth\",\n \"device_authorization_endpoint\": \"https://oauth2.googleapis.com/device/code\",\n \"token_endpoint\": \"https://oauth2.googleapis.com/token\",\n \"userinfo_endpoint\": \"https://openidconnect.googleapis.com/v1/userinfo\",\n \"revocation_endpoint\": \"https://oauth2.googleapis.com/revoke\",\n \"jwks",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:53:37.057Z"
+        }
+      ],
+      "testedRef": "probe:https://accounts.google.com/.well-known/openid-configuration",
+      "verifier": {
+        "status": "supported",
+        "note": "Deterministic probe"
+      },
+      "checkedAt": "2026-11-09T17:53:37.057Z"
+    },
+    {
+      "id": "k1",
+      "text": "Composio's Gmail Toolkit supports OAUTH2 auth.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+          "quote": "auth_schemes: OAUTH2",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:54:28.830Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T17:54:28.830Z"
+    },
+    {
+      "id": "k2",
+      "text": "Composio offers managed auth for Gmail.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+          "quote": "managed auth: true",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:54:28.830Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T17:54:28.830Z"
+    },
+    {
+      "id": "k3",
+      "text": "Register https://backend.composio.dev/api/v3/toolkits/auth/callback as the redirect URI (it stays on /api/v3/ even though the REST API is v3.1).",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/white-labeling-authentication",
+          "quote": "Register `https://backend.composio.dev/api/v3/toolkits/auth/callback` as the provider's authorized redirect URI.",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:54:28.830Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified"
+      },
+      "checkedAt": "2026-11-09T17:54:28.830Z"
+    },
+    {
+      "id": "k4",
+      "text": "Switching to your own auth config doesn't move existing connected accounts; users reconnect, or you import their credentials where supported.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/white-labeling-authentication",
+          "quote": "Existing connected accounts are tied to the auth config they were created with.",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:54:28.830Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified"
+      },
+      "checkedAt": "2026-11-09T17:54:28.830Z"
+    },
+    {
+      "id": "g1",
+      "text": "gmail.send is a sensitive scope; gmail.readonly, gmail.modify and gmail.compose are restricted.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+          "quote": "Restricted scopes",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Classification read from the scope tables on the page"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g2",
+      "text": "Apps whose restricted-scope data passes through or is stored on a server must undergo an annual security assessment (CASA) by a Google-approved third party.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "must undergo an annual security assessment from an independent, third-party assessor that is approved by Google",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g3",
+      "text": "Brand verification comes first and typically takes 2-3 business days when reviewed manually.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "must complete the brand verification step first, which typically takes 2-3 business days",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g4",
+      "text": "Restricted scope verification can take several weeks.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "the restricted scopes verification process can potentially take several weeks to complete",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g5",
+      "text": "Sensitive and restricted scope verification needs an unlisted YouTube demo video of the consent flow and each scope's use.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification",
+          "quote": "Prepare a video that fully demonstrates how a user initiates and grants access to the requested scopes",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g6",
+      "text": "In Testing status the app is limited to 100 test users.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://support.google.com/cloud/answer/15549945",
+          "quote": "limited to up to 100 test users listed in the OAuth consent screen",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g7",
+      "text": "Test-user authorizations expire after 7 days unless the app requests only name, email and profile scopes.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://support.google.com/cloud/answer/15549945",
+          "quote": "Authorizations by a test user will expire seven days from the time of consent.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g8",
+      "text": "An unverified app requesting sensitive or restricted scopes shows a warning and has a lifetime cap of 100 new users.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://support.google.com/cloud/answer/15549945",
+          "quote": "The user cap applies over the entire lifetime of the project, and it cannot be reset or changed.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g9",
+      "text": "Authorized domains (home page, privacy policy, terms, redirect URI domains) must be verified in Google Search Console.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification",
+          "quote": "Verify the ownership of your authorized domains using the Google Search Console.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "g10",
+      "text": "Composio lets you register your own callback endpoint that 302-redirects to its callback, where the provider allows custom redirect URIs.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/white-labeling-authentication",
+          "quote": "A 302 forwarder does not hide Composio",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Section 'register your own provider callback endpoint'; the quote is about branding"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "generatedAt": "2026-11-09T00:00:00.000Z",
+    "origin": "curated",
+    "reviewStatus": "reviewed",
+    "model": "groq:openai/gpt-oss-120b"
+  }
+}

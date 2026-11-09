@@ -610,11 +610,12 @@ The improvement loop is the main proof of "thoughtful use of agents": find a pat
   - your brand on the consent screen;
   - custom scopes;
   - a dedicated quota;
-  - polling triggers faster than 15 minutes.
+  - polling triggers faster than Managed auth's minimum (**2 minutes**, verified M5; was "15").
 
   Sources: docs.composio.dev/toolkits/managed-auth and /docs/using-custom-auth-configuration.
-- Switching to a custom Auth config doesn't migrate existing connections; users must re-authenticate. This is a gotcha in every Guide that has a Toolkit.
+- Switching to a custom Auth config doesn't migrate existing connections; users re-authenticate, or you import credentials where supported (verified M5). This is a gotcha in every Guide that has a Toolkit.
 - A callback can be routed through your own domain with a 302 to Composio's callback.
+- Callback URL: `https://backend.composio.dev/api/v3/toolkits/auth/callback` (v3, verified M5).
 - Toolkits API: `/api/v3.1/toolkits`, `/api/v3.1/toolkits/<slug>`.
 
 **Google**
@@ -626,11 +627,11 @@ The improvement loop is the main proof of "thoughtful use of agents": find a pat
 
 **Slack**
 - **Since 2025-05-29**, non-Marketplace commercial apps get `conversations.history`/`replies` at 1 req/min and 15 objects per call. Internal apps are unaffected. This is a Blocking limit for "read history".
-- **Conflict:** the changelog gives two dates for when existing installs are affected (2025-09-02 vs. 2026-03-03).
-- **Marketplace minimum workspaces:** 10 → 5? Verify the current number.
+- ~~Conflict: two dates for existing installs~~ Resolved M5: existing installs aren't affected; neither date is on the changelog.
+- **Marketplace minimum workspaces:** 10 (verified M5).
 
 **Notion**
-- **Conflict:** older docs say public integrations need a security review. Current docs say the review is for Marketplace listing only.
+- ~~Conflict~~ Resolved M5: public connections need no review; the security review is for Marketplace listing only.
 - Installation scope is fixed at creation; choose "Any workspace" if you might ever list.
 
 **Prior art**

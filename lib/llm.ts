@@ -174,6 +174,7 @@ export async function generateJson<T>(opts: {
     }
     const parsed = opts.schema.safeParse(json);
     if (parsed.success) return parsed.data;
+    if (process.env.DEBUG_LLM) console.error(`[llm] invalid output:`, json === undefined ? text.slice(0, 300) : z.prettifyError(parsed.error).slice(0, 600));
     messages.push(
       { role: "assistant", content: text },
       { role: "user", content: `That output failed validation:\n${z.prettifyError(parsed.error)}\nReturn corrected JSON only.` },

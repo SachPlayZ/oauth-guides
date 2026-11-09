@@ -1,0 +1,664 @@
+{
+  "slug": "notion",
+  "productName": "Notion",
+  "providerName": "Notion",
+  "productUrl": "https://www.notion.so",
+  "oauth": {
+    "supported": true,
+    "protocol": "oauth2",
+    "pkce": "supported",
+    "dynamicClientRegistration": null,
+    "alternatives": [
+      "API_KEY"
+    ],
+    "claimIds": [
+      "k1",
+      "k2"
+    ]
+  },
+  "composio": {
+    "toolkitSlug": "notion",
+    "managedAuthAvailable": true,
+    "authSchemes": [
+      "OAUTH2",
+      "API_KEY"
+    ],
+    "callbackUrl": "Shown in the Composio dashboard when you create the auth config",
+    "authGuideUrl": "https://docs.composio.dev/docs/using-custom-auth-configuration",
+    "claimIds": [
+      "k1",
+      "k2"
+    ]
+  },
+  "usageRows": [
+    {
+      "id": "signin",
+      "usage": "User sign‑in only",
+      "exampleScopes": [
+        "offline_access"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "production_access_review",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "Sign‑in flow requires exact redirect URI matching and admin consent.",
+      "level": 0,
+      "levelCeiling": 5
+    },
+    {
+      "id": "read",
+      "usage": "Read Notion workspace data",
+      "exampleScopes": [
+        "read",
+        "read:database"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "production_access_review",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "Reading data requires admin consent and exact redirect URI.",
+      "level": 0,
+      "levelCeiling": 5
+    },
+    {
+      "id": "write",
+      "usage": "Read and write Notion workspace data",
+      "exampleScopes": [
+        "write",
+        "write:database"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "production_access_review",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "Write access shares same requirements as read, with additional scope.",
+      "level": 0,
+      "levelCeiling": 5
+    }
+  ],
+  "defaultUsageId": "read",
+  "defaultUsageReason": {
+    "text": "Typical use case is read access to workspace data",
+    "claimIds": [
+      "f12"
+    ]
+  },
+  "verdict": {
+    "oneLiner": "Notion OAuth is supported via Composio, requires no special gates, and can be used for sign‑in, read, or write access.",
+    "approvalWait": null,
+    "costs": [],
+    "computed": {
+      "level": 0,
+      "levelCeiling": 5,
+      "handsOnEffort": {
+        "min": 65,
+        "max": 98,
+        "unit": "minutes"
+      },
+      "confidence": "low",
+      "lastChecked": "2026-11-09T09:33:49.141Z",
+      "startHereStepId": "s1"
+    }
+  },
+  "preApprovalLimits": [],
+  "steps": [
+    {
+      "id": "s1",
+      "phase": "prepare",
+      "title": "Set up Notion account and workspace admin rights",
+      "detail": "Log into Notion, ensure you are an admin of a workspace where the integration will be installed. This is required to create a public connection in the Notion developer portal.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 10,
+      "blockers": [],
+      "claimIds": [
+        "f13"
+      ]
+    },
+    {
+      "id": "s2",
+      "phase": "create",
+      "title": "Create a new public connection in Notion developer portal",
+      "detail": "Navigate to Notion’s developer portal, click “New public connection”, and fill out the form. Provide a name, description, and select required scopes (e.g., read, read:database).",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "sign-in",
+        "2FA",
+        "CAPTCHA"
+      ],
+      "estMinutes": 15,
+      "url": "https://www.notion.so/my-integrations",
+      "blockers": [],
+      "claimIds": [
+        "f12"
+      ]
+    },
+    {
+      "id": "s3",
+      "phase": "configure",
+      "title": "Add Composio redirect URI",
+      "detail": "In the Notion connection form, set the Redirect URI exactly to the value shown in Composio’s Notion Toolkit dashboard (decoded value of `redirect_uri`). The URI must match byte‑for‑byte.",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 5,
+      "blockers": [
+        {
+          "text": "Redirect URI mismatch error",
+          "workaround": "Copy the URI from Composio dashboard, decode it if necessary, and paste it verbatim."
+        }
+      ],
+      "claimIds": [
+        "f14"
+      ]
+    },
+    {
+      "id": "s4",
+      "phase": "connect_composio",
+      "title": "Enable Managed Auth in Composio",
+      "detail": "In Composio, add a new Notion connection using the Toolkit. Choose “Managed Auth” so Composio handles the OAuth flow for end‑users. The dashboard will display the callback URL; confirm it matches the Notion redirect URI set earlier.",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 10,
+      "blockers": [],
+      "claimIds": [
+        "k1",
+        "k2"
+      ]
+    },
+    {
+      "id": "s5",
+      "phase": "test",
+      "title": "Validate OAuth flow with a test user",
+      "detail": "Use a separate Notion account (not the admin) to trigger the authorization flow via Composio’s demo link. Verify you receive an access token and can call read endpoints within the 180 req/min limit.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 20,
+      "blockers": [
+        {
+          "text": "Refresh token invalidation after scope change",
+          "workaround": "Avoid changing scopes after initial test; if you must, re‑authorize the test user."
+        }
+      ],
+      "claimIds": [
+        "f1",
+        "f2",
+        "f18",
+        "f19"
+      ]
+    },
+    {
+      "id": "s6",
+      "phase": "submit",
+      "title": "Submit integration for production",
+      "detail": "In Notion’s portal, mark the connection as public, accept terms, provide legal info, and submit. No extra business or security verification is required per settled gates.",
+      "owner": "you",
+      "takeoverPoints": [
+        "payment",
+        "CAPTCHA"
+      ],
+      "estMinutes": null,
+      "blockers": [],
+      "claimIds": [
+        "f12",
+        "f13"
+      ]
+    },
+    {
+      "id": "s7",
+      "phase": "wait",
+      "title": "Await Notion review",
+      "detail": "Notion will review the public connection; no additional steps required while waiting.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": null,
+      "blockers": [],
+      "claimIds": []
+    },
+    {
+      "id": "s8",
+      "phase": "launch",
+      "title": "Go live – enable for all users",
+      "detail": "After approval, set the connection status to “Live” in Notion and ensure Composio’s managed auth is enabled for external users. Monitor usage to stay within rate limits.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "f1",
+        "f2"
+      ]
+    }
+  ],
+  "whileYouWait": [
+    {
+      "text": "Continue using Composio’s managed auth for internal testing and prototype features.",
+      "claimIds": [
+        "k2"
+      ]
+    },
+    {
+      "text": "Create documentation and demo scripts for end‑users to reduce churn caused by OAuth complexity.",
+      "claimIds": [
+        "f18"
+      ]
+    }
+  ],
+  "gotchas": [
+    {
+      "text": "Redirect URI must match exactly; any encoding differences cause rejection.",
+      "severity": "warn",
+      "claimIds": [
+        "f14"
+      ]
+    },
+    {
+      "text": "Refresh tokens can be invalidated if scopes or config change after initial auth.",
+      "severity": "info",
+      "claimIds": [
+        "f19"
+      ]
+    },
+    {
+      "text": "Notion’s rate limits (≈180 req/min) may throttle high‑volume production usage.",
+      "severity": "info",
+      "claimIds": [
+        "f1"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Not found in sources: Must you join a partner program or paid tier to get API/OAuth access?",
+    "Not found in sources: Is access granted by manual approval with no guaranteed outcome?",
+    "Not found in sources: Is a third-party security assessment or audit required?",
+    "Not found in sources: Must the business/organization be verified?",
+    "Not found in sources: Must the publisher/developer identity be verified?",
+    "Not found in sources: Must you prove ownership of a domain (e.g. for redirect URIs or branding)?",
+    "Not found in sources: Do the main scopes need a separate scope verification?",
+    "Not found in sources: Is there a review before users outside your own org can authorize the app (not an optional directory listing)?",
+    "Not found in sources: Is a minimum number of installs/users required for some access?",
+    "Exact URL of Notion’s developer portal for creating public connections (claimed as unknown).",
+    "Whether Notion requires a paid plan or additional billing info for public production apps."
+  ],
+  "claims": [
+    {
+      "id": "k1",
+      "text": "Composio's Notion Toolkit supports OAUTH2, API_KEY auth.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/using-custom-auth-configuration",
+          "quote": "auth_schemes: OAUTH2, API_KEY",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:33:49.739Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T09:33:49.739Z"
+    },
+    {
+      "id": "k2",
+      "text": "Composio offers managed auth for Notion.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/using-custom-auth-configuration",
+          "quote": "managed auth: true",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:33:49.739Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T09:33:49.739Z"
+    },
+    {
+      "id": "f1",
+      "text": "Notion caps the API to approximately 180 requests per minute.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://www.reddit.com/r/Notion/comments/1dmolwx/notion_api_is_causing_headaches_has_anyone",
+          "quote": "Rate limits - Notion caps the API to ~180 requests per minute.",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.141Z",
+          "pageDate": "Tue, 05 Nov 2024 06:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:33:49.141Z"
+    },
+    {
+      "id": "f2",
+      "text": "The Notion API enforces a per‑connection limit and a per‑workspace limit, with some endpoints having their own limits.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/reference/request-limits",
+          "quote": "The Notion API enforces two rate limits: a per‑connection limit and a per‑workspace limit. Some endpoints also have their own limit.",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.141Z",
+          "pageDate": "Tue, 08 Sep 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:33:49.141Z"
+    },
+    {
+      "id": "f12",
+      "text": "You register a Notion OAuth app in the Developer portal by creating a new public connection and filling out the form with connection details.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/get-started/authorization",
+          "quote": "Navigate to the Developer portal and create a new public connection. Fill out the form with your connection details, including your redirect URI(s) under the OAuth configuration section",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.141Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:33:49.141Z"
+    },
+    {
+      "id": "f13",
+      "text": "To register a Notion integration you must have a Notion account and be an admin of a workspace where you’ll install the integration.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://developers.apideck.com/apis/issue-tracking/notion/configuration",
+          "quote": "A Notion account (you can sign up here) A workspace where you have admin permissions",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.141Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:33:49.141Z"
+    },
+    {
+      "id": "f14",
+      "text": "The redirect URI you provide must exactly match the decoded value of the `redirect_uri` parameter in Notion’s Authorization URL.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://hexdocs.pm/notion_sdk/oauth-and-auth-overrides.html",
+          "quote": "If Notion shows an `Authorization URL`, use the exact decoded value from its `redirect_uri=...` parameter",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.141Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:33:49.141Z"
+    },
+    {
+      "id": "f15",
+      "text": "Notion changed public integration authorization so that new connections mint a fresh unique access token for each OAuth authorization instead of reusing existing tokens.",
+      "evidence": "unverified",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/page/changelog",
+          "quote": "New public connections now mint a fresh access_token and refresh_token for each successful OAuth authorization instead of returning the existing active token.",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.142Z",
+          "pageDate": "Sat, 31 Oct 2026 15:00:00 GMT",
+          "quoteMatched": false
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Quote not found on the page"
+      },
+      "checkedAt": "2026-11-09T09:33:49.142Z"
+    },
+    {
+      "id": "f16",
+      "text": "User objects in the Notion API were updated to include a boolean field indicating whether the user's email is verified.",
+      "evidence": "unverified",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/page/changelog",
+          "quote": "User objects now include an email_verified boolean next to person.email, indicating whether Notion",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.143Z",
+          "pageDate": "Sat, 31 Oct 2026 15:00:00 GMT",
+          "quoteMatched": false
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Quote not found on the page"
+      },
+      "checkedAt": "2026-11-09T09:33:49.143Z"
+    },
+    {
+      "id": "f17",
+      "text": "The API deprecated the `archived` and `is_archived` parameters in favor of an `in_trash` argument for trash operations across endpoints.",
+      "evidence": "unverified",
+      "sources": [
+        {
+          "url": "https://cran.r-project.org/web/packages/notionapi/news/news.html",
+          "quote": "All applicable endpoints now use in_trash argument for trash operations (replaces deprecated archived and is_archived parameters).",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.143Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": false
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Quote not found on the page"
+      },
+      "checkedAt": "2026-11-09T09:33:49.143Z"
+    },
+    {
+      "id": "f18",
+      "text": "Developers report that Notion's OAuth flow is difficult for indie developers and can lead to user churn due to complexity.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://www.reddit.com/r/Notion/comments/1vytchs/title_notions_oauth_flow_is_terrible_for_indie",
+          "quote": "Notion’s OAuth flow is terrible for indie developers — and it’s costing us users",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.143Z",
+          "pageDate": "Wed, 09 Sep 2026 23:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:33:49.143Z"
+    },
+    {
+      "id": "f19",
+      "text": "Refresh tokens can become invalid if the OAuth app's scopes or configuration change in Notion after the initial authorization.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://nango.dev/blog/notion-oauth-refresh-token-invalid-grant",
+          "quote": "If the OAuth app’s scopes or configuration change in Notion after authorization, existing refresh tokens can become invalid and require a new authorization.",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:33:49.143Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:33:49.143Z"
+    }
+  ],
+  "meta": {
+    "generatedAt": "2026-11-09T09:34:19.107Z",
+    "origin": "live",
+    "reviewStatus": "unreviewed",
+    "model": "groq:openai/gpt-oss-120b",
+    "durationSec": 50,
+    "costUsd": 0,
+    "unansweredQuestions": [
+      "q_oauth",
+      "q_scopes",
+      "q_gates",
+      "q_distribution",
+      "q_review",
+      "q_listing"
+    ]
+  }
+}

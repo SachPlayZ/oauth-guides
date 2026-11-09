@@ -53,10 +53,12 @@ Use only the Claims given and cite their ids. No facts without a Claim. A Claim 
 
 const ROWS_SYSTEM = `${COMMON}
 Usage rows: 1-3 typical agent use cases with different scopes (e.g. sign-in only vs reading data). The default row is the most typical agent use, not sign-in.
-Gates: for each row, list only gates that a Claim settles as yes or no. A Claim marked "(marketplace listing only)" counts for a row only if that row needs the listing (e.g. because unlisted apps hit a blocking limit). Silence is never "no".
+Gates: for each row, list only gates that a Claim settles as yes or no. Gates are per row: a review or assessment triggered by certain scopes applies only to rows that use those scopes (sign-in-only rows usually need none). A Claim marked "(marketplace listing only)" counts for a row only if that row needs the listing (e.g. because unlisted apps hit a blocking limit). Silence is never "no".
 Gate keys:
 ${GATE_KEYS.map((k) => `- ${k}: ${GATE_QUESTIONS[k]}`).join("\n")}
-approvalWait is null unless a Claim states a duration. Keep production access review, scope verification and listing review apart.`;
+Production means users outside the developer's own org can authorize the app at the volume they need. An optional marketplace/directory listing review is not production_access_review, and its requirements (installs, pen tests, scope checks) are not gates for a row. If unlisted apps are severely limited (e.g. rate limits), record that as a blockingLimit instead.
+approvalWait is null unless an official [documented] Claim states a duration for a review the row needs. Keep production access review, scope verification and listing review apart.
+oneLiner must agree with the gates you set: never say a review, verification or gate is not needed unless a Claim settles it as "no"; if gates are unsettled, say what is unknown.`;
 
 const STEPS_SYSTEM = `${COMMON}
 Steps: concrete and in order, from preparing to launch: the portal, field names, what to paste where. Estimate estMinutes for hands-on work; the "wait" phase has estMinutes null.
@@ -123,7 +125,9 @@ ${claims.map(claimLine).join("\n")}`;
     };
   });
   const defaultUsageId = usageRows.some((r) => r.id === rows.defaultUsageId) ? rows.defaultUsageId : usageRows[0].id;
-  const wait = rows.approvalWait && cite(rows.approvalWait.claimIds).length ? rows.approvalWait : null;
+  // A wait only stands on official evidence: third-party blogs misquote review times.
+  const strong = (id: string) => ["documented", "tested"].includes(claims.find((c) => c.id === id)?.evidence ?? "");
+  const wait = rows.approvalWait && cite(rows.approvalWait.claimIds).some(strong) ? rows.approvalWait : null;
 
   // Unknown gates on the default row are always listed, whatever the model wrote.
   const defRow = usageRows.find((r) => r.id === defaultUsageId)!;

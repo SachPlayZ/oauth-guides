@@ -1,0 +1,1005 @@
+{
+  "slug": "gmail",
+  "productName": "Gmail",
+  "providerName": "Gmail",
+  "productUrl": "https://mail.google.com",
+  "oauth": {
+    "supported": true,
+    "protocol": "oauth2",
+    "pkce": "supported",
+    "dynamicClientRegistration": null,
+    "alternatives": [
+      "none"
+    ],
+    "claimIds": [
+      "p1",
+      "k1"
+    ]
+  },
+  "composio": {
+    "toolkitSlug": "gmail",
+    "managedAuthAvailable": true,
+    "authSchemes": [
+      "OAUTH2"
+    ],
+    "callbackUrl": "Shown in the Composio dashboard when you create the auth config",
+    "authGuideUrl": "https://docs.composio.dev/docs/using-custom-auth-configuration",
+    "claimIds": [
+      "k1",
+      "k2"
+    ]
+  },
+  "usageRows": [
+    {
+      "id": "read_mail",
+      "usage": "Read & search inbox",
+      "exampleScopes": [
+        "gmail.readonly"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "yes",
+          "claimIds": [
+            "f25"
+          ]
+        },
+        {
+          "key": "domain_verification",
+          "answer": "yes",
+          "claimIds": [
+            "f26"
+          ]
+        },
+        {
+          "key": "scope_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "production_access_review",
+          "answer": "yes",
+          "claimIds": [
+            "f28"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [
+        {
+          "key": "https_redirect",
+          "label": "HTTPS Redirect URIs",
+          "claimIds": [
+            "f15"
+          ]
+        }
+      ],
+      "blockingLimits": [
+        {
+          "text": "Restricted to users in the developer's organization until production review is passed",
+          "claimIds": [
+            "f28"
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "key": "other",
+          "label": "Brand verification materials (homepage, privacy policy)",
+          "estMinutes": 15,
+          "claimIds": [
+            "f25",
+            "f7"
+          ]
+        }
+      ],
+      "notes": "Least intrusive scope; required for basic inbox functionality.",
+      "level": 3,
+      "levelCeiling": 5
+    },
+    {
+      "id": "send_mail",
+      "usage": "Send & manage email",
+      "exampleScopes": [
+        "gmail.send",
+        "gmail.modify"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "yes",
+          "claimIds": [
+            "f3"
+          ]
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "yes",
+          "claimIds": [
+            "f25"
+          ]
+        },
+        {
+          "key": "domain_verification",
+          "answer": "yes",
+          "claimIds": [
+            "f26"
+          ]
+        },
+        {
+          "key": "scope_verification",
+          "answer": "yes",
+          "claimIds": [
+            "f18",
+            "f27"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "yes",
+          "claimIds": [
+            "f28"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [
+        {
+          "key": "https_redirect",
+          "label": "HTTPS Redirect URIs",
+          "claimIds": [
+            "f15"
+          ]
+        },
+        {
+          "key": "privacy_policy",
+          "label": "Privacy Policy",
+          "claimIds": [
+            "f7"
+          ]
+        }
+      ],
+      "blockingLimits": [
+        {
+          "text": "Cannot access Gmail data without completing required OAuth verification",
+          "claimIds": [
+            "f2",
+            "f18"
+          ]
+        },
+        {
+          "text": "Restricted to testing users until scope verification and production review are complete",
+          "claimIds": [
+            "f18",
+            "f28"
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "key": "demo_video",
+          "label": "Demo video for scope verification",
+          "estMinutes": 30,
+          "claimIds": [
+            "f8"
+          ]
+        },
+        {
+          "key": "security_questionnaire",
+          "label": "Security assessment questionnaire",
+          "estMinutes": 45,
+          "claimIds": [
+            "f3"
+          ]
+        }
+      ],
+      "notes": "Requires standard/annual security assessment and separate verification for restricted scopes like gmail.send.",
+      "level": 4,
+      "levelCeiling": 5
+    }
+  ],
+  "defaultUsageId": "send_mail",
+  "defaultUsageReason": {
+    "text": "Sending and managing email is one of the most common and impactful Gmail integrations.",
+    "claimIds": [
+      "f18"
+    ]
+  },
+  "verdict": {
+    "oneLiner": "Production access to Gmail via OAuth requires brand/domain verification and, for restricted scopes, a manual security assessment and scope verification before external users can authorize the app.",
+    "approvalWait": null,
+    "costs": [],
+    "computed": {
+      "level": 4,
+      "levelCeiling": 5,
+      "handsOnEffort": {
+        "min": 5,
+        "max": 7.5,
+        "unit": "hours"
+      },
+      "confidence": "low",
+      "lastChecked": "2026-11-09T09:32:32.908Z",
+      "startHereStepId": "s5"
+    }
+  },
+  "preApprovalLimits": [
+    {
+      "text": "Apps are restricted to the developer's organization until production verification is complete.",
+      "claimIds": [
+        "f28"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "s1",
+      "phase": "prepare",
+      "title": "Set Up Google Cloud Project",
+      "detail": "Create a Google Cloud project, verify your domain, and enable the Gmail API. Ensure the project meets the domain verification requirement (claim f26).",
+      "owner": "setup_agent_drafts",
+      "takeoverPoints": [],
+      "estMinutes": 45,
+      "blockers": [],
+      "claimIds": [
+        "f26"
+      ]
+    },
+    {
+      "id": "s2",
+      "phase": "create",
+      "title": "Create OAuth Credentials",
+      "detail": "In the Google Cloud Console, navigate to APIs & Services → Credentials, create a new OAuth 2.0 client ID of type \"Web application\". Note the client ID and client secret (claim f13).",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "sign-in",
+        "2FA"
+      ],
+      "estMinutes": 30,
+      "blockers": [],
+      "claimIds": [
+        "f13"
+      ]
+    },
+    {
+      "id": "s3",
+      "phase": "configure",
+      "title": "Configure Redirect URIs",
+      "detail": "Add the Composio callback URL shown in the Composio dashboard to the \"Authorized redirect URIs\" list. Verify that the URI matches exactly (claims f14, f15).",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 15,
+      "blockers": [],
+      "claimIds": [
+        "f14",
+        "f15"
+      ]
+    },
+    {
+      "id": "s4",
+      "phase": "connect_composio",
+      "title": "Link OAuth Credentials to Composio",
+      "detail": "In Composio’s Gmail Toolkit settings, paste the client ID and client secret, and set the scopes to gmail.send and gmail.modify. Confirm that the Composio-managed auth flow uses PKCE with S256 (claim p1).",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 20,
+      "blockers": [],
+      "claimIds": [
+        "p1",
+        "k1",
+        "k2"
+      ]
+    },
+    {
+      "id": "s5",
+      "phase": "test",
+      "title": "Test Authorization Flow",
+      "detail": "Using the Composio dashboard, initiate a test authorization. Verify that users can log in to Google, consent to the requested scopes, and that tokens are received. Ensure redirect works correctly (claims f9, f10, f11).",
+      "owner": "you",
+      "takeoverPoints": [
+        "sign-in",
+        "2FA"
+      ],
+      "estMinutes": 30,
+      "blockers": [],
+      "claimIds": [
+        "f9",
+        "f10",
+        "f11"
+      ]
+    },
+    {
+      "id": "s6",
+      "phase": "submit",
+      "title": "Submit for Google Review",
+      "detail": "Prepare the required documentation: brand verification (claim f25), domain verification (claim f26), privacy policy, and demo video if required (claim f8). Submit the OAuth client for scope verification of gmail.send (claim f18) and security assessment (claim f23).",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 60,
+      "blockers": [],
+      "claimIds": [
+        "f18",
+        "f23",
+        "f25",
+        "f26",
+        "f8"
+      ]
+    },
+    {
+      "id": "s7",
+      "phase": "wait",
+      "title": "Google Review Period",
+      "detail": "During the review, keep the Composio managed auth operational and monitor the status. If reviewers flag issues, update the privacy policy or brand information as requested.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": null,
+      "blockers": [],
+      "claimIds": [
+        "f22"
+      ]
+    },
+    {
+      "id": "s8",
+      "phase": "launch",
+      "title": "Enable Production Access",
+      "detail": "Once the review approves, set production_access_review to yes and verify the app functions for users outside your org. Test the full send & manage flow.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 15,
+      "blockers": [],
+      "claimIds": []
+    }
+  ],
+  "whileYouWait": [
+    {
+      "text": "Keep using the Composio-managed auth for internal testing to ensure the flow remains functional during the review.",
+      "claimIds": [
+        "k2"
+      ]
+    },
+    {
+      "text": "Add or update demo video and privacy policy in the Google Cloud Console as needed based on reviewer feedback.",
+      "claimIds": [
+        "f8"
+      ]
+    }
+  ],
+  "gotchas": [
+    {
+      "text": "Scope verification for gmail.send can take several weeks; plan release accordingly.",
+      "severity": "warn",
+      "claimIds": [
+        "f18"
+      ]
+    },
+    {
+      "text": "Brand verification may flag your public homepage or privacy policy, causing review delays.",
+      "severity": "blocker",
+      "claimIds": [
+        "f7"
+      ]
+    },
+    {
+      "text": "Google no longer supports less‑secure apps; ensure all connections use OAuth.",
+      "severity": "blocker",
+      "claimIds": [
+        "f2"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Not found in sources: Must you join a partner program or paid tier to get API/OAuth access?",
+    "Not found in sources: Is access granted by manual approval with no guaranteed outcome?",
+    "Not found in sources: Must the business/organization be verified?",
+    "Not found in sources: Is a minimum number of installs/users required for some access?",
+    "Which specific Google Cloud Console page contains the exact URL for the OAuth client credentials?",
+    "Does Composio automatically handle PKCE for Gmail OAuth or must it be configured manually?",
+    "What are the exact steps for completing the annual security assessment required after brand verification?"
+  ],
+  "claims": [
+    {
+      "id": "p1",
+      "text": "OAuth discovery found at https://accounts.google.com/.well-known/openid-configuration; PKCE: plain, S256; no dynamic client registration endpoint",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://accounts.google.com/.well-known/openid-configuration",
+          "quote": "{\n \"issuer\": \"https://accounts.google.com\",\n \"authorization_endpoint\": \"https://accounts.google.com/o/oauth2/v2/auth\",\n \"device_authorization_endpoint\": \"https://oauth2.googleapis.com/device/code\",\n \"token_endpoint\": \"https://oauth2.googleapis.com/token\",\n \"userinfo_endpoint\": \"https://openidconnect.googleapis.com/v1/userinfo\",\n \"revocation_endpoint\": \"https://oauth2.googleapis.com/revoke\",\n \"jwks",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:31:59.927Z"
+        }
+      ],
+      "testedRef": "probe:https://accounts.google.com/.well-known/openid-configuration",
+      "verifier": {
+        "status": "supported",
+        "note": "Deterministic probe"
+      },
+      "checkedAt": "2026-11-09T09:31:59.927Z"
+    },
+    {
+      "id": "k1",
+      "text": "Composio's Gmail Toolkit supports OAUTH2 auth.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/using-custom-auth-configuration",
+          "quote": "auth_schemes: OAUTH2",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:41.004Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T09:32:41.004Z"
+    },
+    {
+      "id": "k2",
+      "text": "Composio offers managed auth for Gmail.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/using-custom-auth-configuration",
+          "quote": "managed auth: true",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:41.004Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T09:32:41.004Z"
+    },
+    {
+      "id": "f1",
+      "text": "Google has deprecated the IAP OAuth Admin API, requiring migration to Google‑managed OAuth clients.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.cloud.google.com/iap/docs/deprecations/migrate-oauth-client",
+          "quote": "The Identity‑Aware Proxy (IAP) OAuth Admin API is now deprecated...IAP now uses a Google‑managed OAuth client for browser access by default...",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.904Z",
+          "pageDate": "Tue, 13 Oct 2026 05:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.904Z"
+    },
+    {
+      "id": "f2",
+      "text": "Google will no longer support less‑secure apps and Google Sync from March 14, 2025, requiring OAuth for Gmail access.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://knowledge.workspace.google.com/admin/sync/transition-from-less-secure-apps-to-oauth",
+          "quote": "Starting March 14, 2025, you and your users must use OAuth with third‑party apps to access Gmail...Google is turning off access to less secure apps.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.905Z",
+          "pageDate": "Thu, 01 Oct 2026 21:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.905Z"
+    },
+    {
+      "id": "f3",
+      "text": "Apps accessing Google user data via server must undergo annual security assessment after brand verification.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "If the app accesses or has the capability to access Google user data from or through a server...the system must undergo an annual security assessment.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.908Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.908Z"
+    },
+    {
+      "id": "f4",
+      "text": "Sensitive scope verification process can take several weeks and follows brand verification which takes 2‑3 business days.",
+      "evidence": "unverified",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification",
+          "quote": "The automated review usually completes in a few minutes...restricted scopes verification process can potentially take several weeks to complete.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.911Z",
+          "pageDate": "Wed, 19 Aug 2026 00:00:00 GMT",
+          "quoteMatched": false
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Quote not found on the page; Quote states the automated review is quick but restricted scopes can take weeks; does not specify 2‑3 business days for brand verification."
+      },
+      "checkedAt": "2026-11-09T09:32:32.911Z"
+    },
+    {
+      "id": "f5",
+      "text": "Automation scripts using the IAP OAuth Admin API must be updated to stop calling the deprecated API.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.cloud.google.com/iap/docs/deprecations/migrate-oauth-client",
+          "quote": "If your automation scripts or Infrastructure as Code (IaC) tools use the IAP OAuth 2.0 Admin API...you must update the scripts so that they don't use the IAP OAuth 2.0 Admin API.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.914Z",
+          "pageDate": "Tue, 13 Oct 2026 05:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.914Z"
+    },
+    {
+      "id": "f6",
+      "text": "OAuth apps with branding changes must first complete brand verification before scope verification can proceed.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "Note that all apps must complete the brand verification step first, which typically takes 2-3 business days...",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.916Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.916Z"
+    },
+    {
+      "id": "f7",
+      "text": "OAuth app reviews can stall for weeks, especially if the brand verification incorrectly flags public homepage or privacy policy.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://discuss.google.dev/c/google-cloud/cloud-foundation-onboarding/103",
+          "quote": "OAuth brand verification incorrectly flagging public homepage and privacy policy before production deadline",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:32:32.916Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Quote mentions brand verification issues but does not quantify the stall duration."
+      },
+      "checkedAt": "2026-11-09T09:32:32.916Z"
+    },
+    {
+      "id": "f8",
+      "text": "Apps may need to submit a demo video to satisfy updated review requirements.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://devforum.roblox.com/t/oauth-20-app-is-being-constantly-automatically-rejected/4590967",
+          "quote": "All submissions now require a Demo Video showcasing your complete end‑to‑end user flow...",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:32:32.916Z",
+          "pageDate": "Wed, 22 Apr 2026 23:18:19 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.916Z"
+    },
+    {
+      "id": "f9",
+      "text": "Developers redirect users to the authorization endpoint to obtain an authorization code, which is then exchanged for tokens.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.cloud.google.com/iam/docs/workforce-manage-oauth-app",
+          "quote": "You can redirect users to the authorization endpoint (`https://auth.cloud.google/authorize`) to obtain an authorization code",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.917Z",
+          "pageDate": "Fri, 09 Oct 2026 04:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.917Z"
+    },
+    {
+      "id": "f10",
+      "text": "The authorization code is exchanged for access or refresh tokens using the registered OAuth client credentials.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.cloud.google.com/iam/docs/workforce-manage-oauth-app",
+          "quote": "use the registered OAuth client credentials to exchange authorization codes or refresh tokens with the [Cloud OAuth API]",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.918Z",
+          "pageDate": "Fri, 09 Oct 2026 04:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.918Z"
+    },
+    {
+      "id": "f11",
+      "text": "The authorization code grant type is explicitly supported for confidential clients.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.cloud.google.com/iam/docs/workforce-manage-oauth-app",
+          "quote": "'allowedGrantTypes': ['AUTHORIZATION_CODE_GRANT'], \\ 'allowedRedirectUris': ['REDIRECT_URI'], \\ 'allowedScopes': ['https://www.googleapis.com/auth/cloud-platform']",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.918Z",
+          "pageDate": "Fri, 09 Oct 2026 04:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "quote mentions allowedGrantTypes but does not specify client type as confidential."
+      },
+      "checkedAt": "2026-11-09T09:32:32.918Z"
+    },
+    {
+      "id": "f12",
+      "text": "OAuth clients are created within a Google Cloud project using specific client type configurations.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.cloud.google.com/iam/docs/workforce-manage-oauth-app",
+          "quote": "'clientType': 'CONFIDENTIAL_CLIENT', \\ 'description': 'My OAuth client description', \\ 'disabled': false, \\ 'displayName': 'My OAuth client'",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.919Z",
+          "pageDate": "Fri, 09 Oct 2026 04:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.919Z"
+    },
+    {
+      "id": "f13",
+      "text": "OAuth credentials, including client IDs and secrets, are managed in the Google Cloud Console credentials section.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/web-server",
+          "quote": "To get these credentials for your application, visit * https://console.cloud.google.com/apis/credentials.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.921Z",
+          "pageDate": "Fri, 16 Oct 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.921Z"
+    },
+    {
+      "id": "f14",
+      "text": "A mismatch between the redirect URI in the authorization call and the registered client will cause an error.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/nest/device-access/reference/errors/authorization",
+          "quote": "Make sure the `redirect_uri` value you're using in authorization calls is the same as the one you set for the OAuth 2.0 Client",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.921Z",
+          "pageDate": "Fri, 02 Oct 2026 21:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.921Z"
+    },
+    {
+      "id": "f15",
+      "text": "Redirect URIs are verified against the credentials configured in the Google Cloud Credentials page.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/nest/device-access/reference/errors/authorization",
+          "quote": "as found in your [Google Cloud Credentials](https://console.developers.google.com/apis/credentials) page.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.921Z",
+          "pageDate": "Fri, 02 Oct 2026 21:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.921Z"
+    },
+    {
+      "id": "f16",
+      "text": "Redirect URIs can be added to an OAuth client under the 'Authorized redirect URIs' section.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://help.make.com/connect-to-google-services-using-a-custom-oauth-client",
+          "quote": "Under the Authorized redirect URIs, click + Add URI and enter the required redirect URI.",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:32:32.921Z",
+          "pageDate": "Fri, 30 Jan 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.921Z"
+    },
+    {
+      "id": "f17",
+      "text": "There is no direct API to modify authorized redirect URIs for an existing OAuth 2.0 client ID via the standard interface.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://discuss.google.dev/t/api-to-add-authorized-javascript-origin-and-redirect-uri-to-oauth2-client-id/167719",
+          "quote": "There isn’t a direct API to modify the authorized JavaScript origins and redirect URIs of an existing OAuth 2.0 client ID",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:32:32.921Z",
+          "pageDate": "Tue, 24 Sep 2024 12:33:52 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.921Z"
+    },
+    {
+      "id": "f18",
+      "text": "The Gmail sensitive scope gmail.send triggers a verification review.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://discuss.google.dev/t/oauth-verification-gmail-send-under-review-since-early-september-2026-no-trust-safety-email-received-and-a-question-about-adding-a-scope/409025",
+          "quote": "Our app ... has been under data access verification for the sensitive scope gmail.send ...",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:32:32.922Z",
+          "pageDate": "Wed, 28 Oct 2026 15:15:32 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.922Z"
+    },
+    {
+      "id": "f19",
+      "text": "Gmail API scopes classified as restricted require a scope verification process.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "Restricted scopes provide wide access to Google user data and require a scope verification process",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.922Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.922Z"
+    },
+    {
+      "id": "f20",
+      "text": "If you change or add new Gmail scopes after verification, you may need to undergo verification again.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://support.google.com/cloud/answer/7454865?hl=en",
+          "quote": "If you change your client or use new scopes after verification, you might have to go through verification again.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.922Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:32:32.922Z"
+    },
+    {
+      "id": "f22",
+      "text": "Gmail OAuth apps may be subject to a manual review with no guaranteed outcome.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "or request a manual review.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.922Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Quote indicates a manual review can be requested, but does not mention that the outcome is not guaranteed."
+      },
+      "checkedAt": "2026-11-09T09:32:32.922Z"
+    },
+    {
+      "id": "f23",
+      "text": "Apps accessing restricted Gmail data must undergo an annual security assessment.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "Apps accessing restricted data ... must undergo an annual security assessment by a Google‑approved third party.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.924Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Quote explicitly states that apps accessing restricted data must undergo an annual security assessment."
+      },
+      "checkedAt": "2026-11-09T09:32:32.924Z"
+    },
+    {
+      "id": "f25",
+      "text": "Gmail OAuth apps must complete brand verification before production.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "Click the Verify Branding button to start the evaluation process.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.924Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Quote indicates brand verification must be completed to start evaluation, implying it is required before production."
+      },
+      "checkedAt": "2026-11-09T09:32:32.924Z"
+    },
+    {
+      "id": "f26",
+      "text": "Domain ownership must be verified for Gmail OAuth apps.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification",
+          "quote": "verifying domain ownership",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.924Z",
+          "pageDate": "Wed, 19 Aug 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Quote confirms domain ownership must be verified."
+      },
+      "checkedAt": "2026-11-09T09:32:32.924Z"
+    },
+    {
+      "id": "f27",
+      "text": "Gmail restricted scopes require separate scope verification.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "Restricted scopes ... require a scope verification process",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.926Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Quote explicitly states that restricted scopes require a scope verification process."
+      },
+      "checkedAt": "2026-11-09T09:32:32.926Z"
+    },
+    {
+      "id": "f28",
+      "text": "Google reviews Gmail OAuth apps before users outside the developer’s org can authorize them.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+          "quote": "Apps requesting sensitive or restricted Google API scopes ... require additional verification",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:32:32.927Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Quote mentions additional verification for sensitive or restricted scopes, but does not explicitly state Google reviews before users outside the developer’s organization can authorize them."
+      },
+      "checkedAt": "2026-11-09T09:32:32.927Z"
+    }
+  ],
+  "meta": {
+    "generatedAt": "2026-11-09T09:33:27.719Z",
+    "origin": "live",
+    "reviewStatus": "unreviewed",
+    "model": "groq:openai/gpt-oss-120b",
+    "durationSec": 88,
+    "costUsd": 0,
+    "unansweredQuestions": [
+      "q_distribution",
+      "q_review",
+      "q_listing",
+      "q_ratelimits"
+    ]
+  }
+}

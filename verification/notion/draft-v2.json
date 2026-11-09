@@ -1,0 +1,837 @@
+{
+  "slug": "notion",
+  "productName": "Notion",
+  "providerName": "Notion",
+  "productUrl": "https://www.notion.so",
+  "oauth": {
+    "supported": true,
+    "protocol": "oauth2",
+    "pkce": "unknown",
+    "dynamicClientRegistration": null,
+    "alternatives": [
+      "API_KEY"
+    ],
+    "claimIds": [
+      "k1"
+    ]
+  },
+  "composio": {
+    "toolkitSlug": "notion",
+    "managedAuthAvailable": true,
+    "authSchemes": [
+      "OAUTH2",
+      "API_KEY"
+    ],
+    "callbackUrl": "https://backend.composio.dev/api/v3/toolkits/auth/callback",
+    "authGuideUrl": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+    "claimIds": [
+      "k1",
+      "k2",
+      "k3"
+    ]
+  },
+  "usageRows": [
+    {
+      "id": "read_write_pages",
+      "usage": "Read and write pages & databases",
+      "exampleScopes": [
+        "read_content",
+        "update_content"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "no",
+          "claimIds": [
+            "f9"
+          ]
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "no",
+          "claimIds": [
+            "f15"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "no",
+          "claimIds": [
+            "f16"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [
+        {
+          "key": "https_redirect",
+          "label": "Redirect URI must be HTTPS",
+          "claimIds": [
+            "k3"
+          ]
+        }
+      ],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "",
+      "level": 1,
+      "levelCeiling": 5
+    },
+    {
+      "id": "sign_in_only",
+      "usage": "Sign‑in only (openid profile)",
+      "exampleScopes": [
+        "openid",
+        "profile"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "no",
+          "claimIds": [
+            "f9"
+          ]
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "no",
+          "claimIds": [
+            "f15"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "no",
+          "claimIds": [
+            "f16"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [
+        {
+          "key": "https_redirect",
+          "label": "Redirect URI must be HTTPS",
+          "claimIds": [
+            "k3"
+          ]
+        }
+      ],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "",
+      "level": 1,
+      "levelCeiling": 5
+    },
+    {
+      "id": "read_only_data",
+      "usage": "Read data only (e.g., list databases)",
+      "exampleScopes": [
+        "read_content"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "no",
+          "claimIds": [
+            "f9"
+          ]
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "security_assessment",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "no",
+          "claimIds": [
+            "f15"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "no",
+          "claimIds": [
+            "f16"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "unknown",
+          "claimIds": []
+        }
+      ],
+      "requirements": [
+        {
+          "key": "https_redirect",
+          "label": "Redirect URI must be HTTPS",
+          "claimIds": [
+            "k3"
+          ]
+        }
+      ],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "",
+      "level": 1,
+      "levelCeiling": 5
+    }
+  ],
+  "defaultUsageId": "read_write_pages",
+  "defaultUsageReason": {
+    "text": "Typical agents need both read and write capabilities to work with Notion pages and databases.",
+    "claimIds": [
+      "f7"
+    ]
+  },
+  "verdict": {
+    "oneLiner": "Notion OAuth apps reach production without partner program enrollment, manual reviews, or scope verification; just configure HTTPS redirect URIs and you’re ready.",
+    "approvalWait": null,
+    "costs": [],
+    "computed": {
+      "level": 1,
+      "levelCeiling": 5,
+      "handsOnEffort": {
+        "min": 1.5,
+        "max": 2,
+        "unit": "hours"
+      },
+      "confidence": "low",
+      "lastChecked": "2026-11-09T09:39:46.491Z",
+      "startHereStepId": "s5"
+    }
+  },
+  "preApprovalLimits": [],
+  "steps": [
+    {
+      "id": "s1",
+      "phase": "prepare",
+      "title": "Gather required info and assets",
+      "detail": "Collect your Notion client ID and secret from the integration you will create, decide on scopes (read_content, update_content), and prepare a privacy policy URL and logo if you plan a Marketplace listing (optional).",
+      "owner": "setup_agent_drafts",
+      "takeoverPoints": [],
+      "estMinutes": 30,
+      "blockers": [],
+      "claimIds": [
+        "k1",
+        "k2",
+        "f15",
+        "f16"
+      ]
+    },
+    {
+      "id": "s2",
+      "phase": "create",
+      "title": "Create a public integration in Notion",
+      "detail": "Sign in to Notion’s Developer portal (app.notion.com/developers) and click “New integration”. Fill in the name, select “Public integration”, paste the redirect URI https://backend.composio.dev/api/v3/toolkits/auth/callback, choose the scopes read_content and update_content, and save. Record the generated client ID and client secret.",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "sign-in",
+        "2FA",
+        "CAPTCHA"
+      ],
+      "estMinutes": 20,
+      "url": "https://app.notion.com/developers",
+      "blockers": [],
+      "claimIds": [
+        "k3",
+        "f18",
+        "f19",
+        "f20"
+      ]
+    },
+    {
+      "id": "s3",
+      "phase": "configure",
+      "title": "Configure Composio to use your Notion credentials",
+      "detail": "In the Composio dashboard, go to the Notion toolkit settings. Select “Use your own OAuth credentials”, paste the client ID and secret you obtained, and confirm the redirect URI matches exactly. Save the configuration.",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 10,
+      "url": "https://app.composio.dev/dashboard/toolkits/notion",
+      "blockers": [],
+      "claimIds": [
+        "k1",
+        "k2",
+        "k3"
+      ]
+    },
+    {
+      "id": "s4",
+      "phase": "connect_composio",
+      "title": "Verify managed auth fallback works",
+      "detail": "Enable Composio’s managed auth toggle for Notion as a fallback. Run a quick test connection using a test Notion workspace to ensure the managed flow still works while your custom credentials are being reviewed (if any).",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "k2"
+      ]
+    },
+    {
+      "id": "s5",
+      "phase": "test",
+      "title": "Test the OAuth flow end‑to‑end",
+      "detail": "Using a separate Notion account (not your own org), initiate the authorization flow via Composio’s demo script. Complete the consent screen, receive the authorization code, exchange it for tokens, and perform a read/write page operation to confirm scopes are correct.",
+      "owner": "you",
+      "takeoverPoints": [
+        "sign-in",
+        "2FA"
+      ],
+      "estMinutes": 15,
+      "blockers": [],
+      "claimIds": [
+        "k1",
+        "k3",
+        "f3"
+      ]
+    },
+    {
+      "id": "s6",
+      "phase": "submit",
+      "title": "(Optional) Submit Marketplace listing",
+      "detail": "If you want the integration listed publicly, fill out the Marketplace listing form with description, logo, and privacy policy. No scope verification is required unless you request a listing; otherwise you can skip this step.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": null,
+      "blockers": [],
+      "claimIds": [
+        "f6",
+        "f9",
+        "f11"
+      ]
+    },
+    {
+      "id": "s7",
+      "phase": "wait",
+      "title": "Await any review (if listing submitted)",
+      "detail": "If you submitted a Marketplace listing, wait for Notion’s security/privacy review. Otherwise you can proceed immediately to launch.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": null,
+      "blockers": [],
+      "claimIds": [
+        "f11"
+      ]
+    },
+    {
+      "id": "s8",
+      "phase": "launch",
+      "title": "Make the integration public",
+      "detail": "Publish the integration settings in Composio. Share the authorization URL with external users or embed it in your app. Users outside your organization can now authorize the app at scale.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "f5",
+        "f8",
+        "f16"
+      ]
+    }
+  ],
+  "whileYouWait": [
+    {
+      "text": "Continue using Composio’s managed Notion auth for production users while your custom OAuth config is being tested or reviewed.",
+      "claimIds": [
+        "k2"
+      ]
+    },
+    {
+      "text": "Create demo scripts and onboarding docs for external users to guide them through the consent screen.",
+      "claimIds": []
+    }
+  ],
+  "gotchas": [
+    {
+      "text": "If you change scopes after users have authorized, existing refresh tokens may become invalid and users will need to re‑authorize.",
+      "severity": "warn",
+      "claimIds": [
+        "f3"
+      ]
+    },
+    {
+      "text": "Switching from managed auth to your own credentials does not automatically migrate existing connections; users must reconnect or you must import credentials where supported.",
+      "severity": "info",
+      "claimIds": [
+        "f4"
+      ]
+    },
+    {
+      "text": "Redirect URI must match exactly and be HTTPS; a mismatch will cause the OAuth exchange to fail.",
+      "severity": "blocker",
+      "claimIds": [
+        "f20"
+      ]
+    },
+    {
+      "text": "Switching from managed auth to your own OAuth app doesn't migrate existing connections: users reconnect, or you import their credentials where supported.",
+      "severity": "warn",
+      "claimIds": [
+        "k4"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Not found in sources: Is access granted by manual approval with no guaranteed outcome?",
+    "Not found in sources: Is a third-party security assessment or audit required?",
+    "Not found in sources: Must the business/organization be verified?",
+    "Not found in sources: Must the publisher/developer identity be verified?",
+    "Not found in sources: Must you prove ownership of a domain (e.g. for redirect URIs or branding)?",
+    "Not found in sources: Is a minimum number of installs/users required for some access?",
+    "Exact URL of Notion’s Developer portal login page (assumed https://app.notion.com/developers) – not verified in claims",
+    "Whether Notion requires a paid plan for public OAuth apps – not addressed in provided claims"
+  ],
+  "claims": [
+    {
+      "id": "k1",
+      "text": "Composio's Notion Toolkit supports OAUTH2, API_KEY auth.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+          "quote": "auth_schemes: OAUTH2, API_KEY",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:48.567Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T09:39:48.567Z"
+    },
+    {
+      "id": "k2",
+      "text": "Composio offers managed auth for Notion.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+          "quote": "managed auth: true",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:48.567Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T09:39:48.567Z"
+    },
+    {
+      "id": "k3",
+      "text": "Register https://backend.composio.dev/api/v3/toolkits/auth/callback as the redirect URI (it stays on /api/v3/ even though the REST API is v3.1).",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/white-labeling-authentication",
+          "quote": "Register `https://backend.composio.dev/api/v3/toolkits/auth/callback` as the provider's authorized redirect URI.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:48.567Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified"
+      },
+      "checkedAt": "2026-11-09T09:39:48.567Z"
+    },
+    {
+      "id": "k4",
+      "text": "Switching to your own auth config doesn't move existing connected accounts; users reconnect, or you import their credentials where supported.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/white-labeling-authentication",
+          "quote": "Existing connected accounts are tied to the auth config they were created with.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:48.567Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified"
+      },
+      "checkedAt": "2026-11-09T09:39:48.567Z"
+    },
+    {
+      "id": "f1",
+      "text": "Notion released a new API version on 2026-03-11 that replaced the `after` parameter in Append Block Children with a `position` object, removed the `archived` field in favor of `in_trash`, and renamed the `transcription` block type to `meeting_notes`.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/reference/changes-by-version",
+          "quote": "The `after` parameter on Append Block Children is replaced by a `position` object. The `archived` field is removed in favor of `in_trash` across all request parameters and response bodies. The `transcription` block type is renamed to `meeting_notes`.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.469Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.469Z"
+    },
+    {
+      "id": "f2",
+      "text": "The 2025-09-03 API update reorganized `/v1/databases` into `/v1/data_sources` for individual data source management and kept existing database IDs, introducing a new data source ID concept.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/reference/changes-by-version",
+          "quote": "`/v1/databases` APIs are re-organized into `/v1/data_sources` (for managing individual data sources under a database container) and `/v1/databases` (for managing the database container.) Existing database IDs stay the same, but a new concept of data source IDs is introduced, and required in order to manage data source properties, to support multi-source databases.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.469Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.469Z"
+    },
+    {
+      "id": "f3",
+      "text": "If a Notion OAuth app’s scopes or configuration change after a user authorizes it, existing refresh tokens can become invalid and require re‑authorization.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://nango.dev/blog/notion-oauth-refresh-token-invalid-grant",
+          "quote": "If the OAuth app’s scopes or configuration change in Notion after authorization, existing refresh tokens can become invalid and require a new authorization.",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:39:46.469Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.469Z"
+    },
+    {
+      "id": "f4",
+      "text": "Community reports that the Notion API’s `archived` and `is_archived` parameters are deprecated and must be replaced with `in_trash`, otherwise requests may fail.",
+      "evidence": "reported",
+      "sources": [
+        {
+          "url": "https://cran.r-project.org/web/packages/notionapi/news/news.html",
+          "quote": "All applicable endpoints now use `in_trash` argument for trash operations (replaces deprecated `archived` and `is_archived` parameters).",
+          "official": false,
+          "retrievedAt": "2026-11-09T09:39:46.469Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Quote confirms deprecation but does not state failure if not replaced."
+      },
+      "checkedAt": "2026-11-09T09:39:46.469Z"
+    },
+    {
+      "id": "f5",
+      "text": "OAuth integrations can start the authorization flow as soon as client credentials and redirect URI are configured; marketplace submission or review is not required.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/authorization/overview",
+          "quote": "Both scoped OAuth integrations and public integrations use this flow. You can start authorization as soon as you configure the integration’s client credentials and redirect URI; Marketplace submission or review is not required.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.476Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.476Z"
+    },
+    {
+      "id": "f6",
+      "text": "Marketplace listing details are managed separately through the Listings section and are not required to obtain the authorization URL for a public connection.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/get-started/authorization",
+          "quote": "Marketplace listing details (such as descriptions, categories, and images) are managed separately through the **Listings** section.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.477Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Quote indicates listing details managed separately, not explicitly that they are not required for auth."
+      },
+      "checkedAt": "2026-11-09T09:39:46.477Z"
+    },
+    {
+      "id": "f7",
+      "text": "Notion distinguishes between OAuth scopes and public/private/installation access levels; an agent would typically use connection types for reading and writing pages/databases, but scopes themselves do not trigger a separate verification process.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/get-started/authorization",
+          "quote": "A public connection isn’t tied to a single workspace... Instead, public connections follow the OAuth 2.0 protocol to authorize a connection to interact with a workspace.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.481Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "Quote does not mention verification process for scopes."
+      },
+      "checkedAt": "2026-11-09T09:39:46.481Z"
+    },
+    {
+      "id": "f8",
+      "text": "Authorization can begin immediately after configuring client credentials and the redirect URI, without requiring a Marketplace submission or prior scope review.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/authorization/overview",
+          "quote": "You can start authorization as soon as you configure the integration’s client credentials and redirect URI; Marketplace submission or review is not required.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.486Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.486Z"
+    },
+    {
+      "id": "f9",
+      "text": "Joining the Technology Partnership Program is optional and intended for companies interested in scaling a public integration with added support, not a requirement for API access.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/resources/historical-changelog",
+          "quote": "This program is open to companies who have built a public integration and are interested in improving and scaling their integration",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.491Z",
+          "pageDate": "Tue, 05 Jul 2022 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.491Z"
+    },
+    {
+      "id": "f11",
+      "text": "Security and privacy reviews are conducted for work made available in the Notion Marketplace, not for standard OAuth app production access where users authorize the integration directly. (marketplace listing only)",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://www.notion.com/help/template-gallery-guidelines-and-terms",
+          "quote": "Notion, or an authorized third party selected by us, may, but is not obligated to, conduct a security or privacy review of Your Work... that You wish to make available on the Notion Marketplace",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.494Z",
+          "pageDate": "Thu, 24 Oct 2024 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.494Z"
+    },
+    {
+      "id": "f15",
+      "text": "Scope verification or justification is not required to start authorization; this process is only necessary if submitting a listing to the Notion Marketplace.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/authorization/overview",
+          "quote": "You can start authorization as soon as you configure the integration’s client credentials and redirect URI; Marketplace submission or review is not required.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.497Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "supported"
+      },
+      "checkedAt": "2026-11-09T09:39:46.497Z"
+    },
+    {
+      "id": "f16",
+      "text": "There is no review required before users outside the developer's organization can authorize the app; public connections can be installed in any workspace once credentials are configured.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/get-started/authorization",
+          "quote": "A public connection can be installed in any Notion workspace within its installation scope — either any workspace, or a specific set chosen at creation time.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.498Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "The quote confirms public connections can be installed in any workspace, but does not address the review requirement."
+      },
+      "checkedAt": "2026-11-09T09:39:46.498Z"
+    },
+    {
+      "id": "f18",
+      "text": "Notion’s OAuth flow follows the standard authorization‑code grant; the developer defines a redirect URI and receives a code that is exchanged for a token at https://api.notion.com/v1/oauth/token.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/guides/get-started/authorization",
+          "quote": "Next, send the `code` as part of a `POST` request to Notion’s token endpoint: <https://api.notion.com/v1/oauth/token>.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.498Z",
+          "pageDate": "Wed, 11 Mar 2026 00:00:00 GMT",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "The quote confirms the token endpoint but not the developer's control of the redirect URI."
+      },
+      "checkedAt": "2026-11-09T09:39:46.498Z"
+    },
+    {
+      "id": "f19",
+      "text": "To register an OAuth app, create a public integration in Notion’s Developer portal (app.notion.com/developers) and configure the redirect URI.",
+      "evidence": "unverified",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/workers/guides/oauth",
+          "quote": "Go to your provider’s developer settings (e.g., GitHub Developer Settings, Google Cloud Console) and create an OAuth app. Add the redirect URL from the previous step as an authorized redirect URI.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.499Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "unsupported",
+        "note": "The quote refers to creating an OAuth app on the provider side, not Notion’s developer portal."
+      },
+      "checkedAt": "2026-11-09T09:39:46.499Z"
+    },
+    {
+      "id": "f20",
+      "text": "Redirect URIs must be HTTPS, match exactly, and can be added per integration; localhost is not supported for production usage.",
+      "evidence": "unverified",
+      "sources": [
+        {
+          "url": "https://developers.notion.com/workers/guides/oauth",
+          "quote": "Store your `clientId` and `clientSecret` as secrets… Add the redirect URL from the previous step as an authorized redirect URI.",
+          "official": true,
+          "retrievedAt": "2026-11-09T09:39:46.499Z",
+          "quoteMatched": true
+        }
+      ],
+      "verifier": {
+        "status": "unsupported",
+        "note": "The quote does not mention HTTPS requirement or localhost restrictions."
+      },
+      "checkedAt": "2026-11-09T09:39:46.499Z"
+    }
+  ],
+  "meta": {
+    "generatedAt": "2026-11-09T09:40:27.121Z",
+    "origin": "live",
+    "reviewStatus": "unreviewed",
+    "model": "groq:openai/gpt-oss-120b",
+    "durationSec": 108,
+    "costUsd": 0,
+    "unansweredQuestions": [
+      "q_review",
+      "q_ratelimits"
+    ]
+  }
+}

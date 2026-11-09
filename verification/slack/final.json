@@ -1,0 +1,706 @@
+{
+  "slug": "slack",
+  "productName": "Slack",
+  "providerName": "Slack Technologies (Salesforce)",
+  "productUrl": "https://slack.com",
+  "devPortalUrl": "https://api.slack.com/apps",
+  "oauth": {
+    "supported": true,
+    "protocol": "oidc",
+    "pkce": "supported",
+    "discoveryUrl": "https://slack.com/.well-known/openid-configuration",
+    "dynamicClientRegistration": false,
+    "alternatives": [
+      "Internal app with a bot token (your own workspace only)"
+    ],
+    "claimIds": [
+      "p1",
+      "h10"
+    ]
+  },
+  "composio": {
+    "toolkitSlug": "slack",
+    "managedAuthAvailable": true,
+    "authSchemes": [
+      "OAUTH2"
+    ],
+    "callbackUrl": "https://backend.composio.dev/api/v3/toolkits/auth/callback",
+    "authGuideUrl": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+    "claimIds": [
+      "k1",
+      "k2",
+      "k3"
+    ]
+  },
+  "usageRows": [
+    {
+      "id": "read_history",
+      "usage": "Read channel & DM history (summarize, search)",
+      "exampleScopes": [
+        "channels:history",
+        "groups:history",
+        "im:history"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "no",
+          "claimIds": [
+            "h1"
+          ]
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "no",
+          "claimIds": [
+            "h1"
+          ]
+        },
+        {
+          "key": "security_assessment",
+          "answer": "no",
+          "claimIds": [
+            "h8",
+            "h1"
+          ]
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "no",
+          "claimIds": [
+            "h7",
+            "h1"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "no",
+          "claimIds": [
+            "h1"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "no",
+          "claimIds": [
+            "h5",
+            "h1"
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "key": "https_redirect",
+          "label": "HTTPS redirect URL",
+          "claimIds": [
+            "h9"
+          ]
+        }
+      ],
+      "blockingLimits": [
+        {
+          "text": "Unlisted commercial apps: conversations.history / replies at 1 request/minute, 15 objects per call, for installs after 2025-05-29. Listing in the Marketplace lifts it.",
+          "claimIds": [
+            "h2",
+            "h4"
+          ]
+        }
+      ],
+      "artifacts": [],
+      "notes": "Self-serve to install anywhere, but history reads are throttled until you're in the Slack Marketplace, which means 10 active workspaces and an enhanced review."
+    },
+    {
+      "id": "send",
+      "usage": "Post messages & notifications",
+      "exampleScopes": [
+        "chat:write",
+        "channels:read"
+      ],
+      "gates": [
+        {
+          "key": "partner_application",
+          "answer": "no",
+          "claimIds": [
+            "h1"
+          ]
+        },
+        {
+          "key": "manual_approval_uncertain",
+          "answer": "no",
+          "claimIds": [
+            "h1"
+          ]
+        },
+        {
+          "key": "security_assessment",
+          "answer": "no",
+          "claimIds": [
+            "h8",
+            "h1"
+          ]
+        },
+        {
+          "key": "business_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "publisher_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "domain_verification",
+          "answer": "unknown",
+          "claimIds": []
+        },
+        {
+          "key": "scope_verification",
+          "answer": "no",
+          "claimIds": [
+            "h7",
+            "h1"
+          ]
+        },
+        {
+          "key": "production_access_review",
+          "answer": "no",
+          "claimIds": [
+            "h1"
+          ]
+        },
+        {
+          "key": "min_installs",
+          "answer": "no",
+          "claimIds": [
+            "h5",
+            "h1"
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "key": "https_redirect",
+          "label": "HTTPS redirect URL",
+          "claimIds": [
+            "h9"
+          ]
+        }
+      ],
+      "blockingLimits": [],
+      "artifacts": [],
+      "notes": "The history limits don't touch posting, so public distribution is enough."
+    }
+  ],
+  "defaultUsageId": "read_history",
+  "defaultUsageReason": {
+    "text": "Most agents read conversations to summarize or answer questions, which is exactly what the non-Marketplace limit throttles.",
+    "claimIds": [
+      "h2"
+    ]
+  },
+  "verdict": {
+    "oneLiner": "Self-serve to install in any workspace, but unlisted apps can read history only once a minute — production-volume reading needs a Slack Marketplace listing (10 active workspaces, up to ~12 weeks of review).",
+    "approvalWait": {
+      "range": {
+        "min": 0,
+        "max": 12,
+        "unit": "weeks"
+      },
+      "claimIds": [
+        "h6"
+      ]
+    },
+    "costs": []
+  },
+  "preApprovalLimits": [
+    {
+      "text": "Before a Marketplace listing: conversations.history / replies at 1 request/minute and 15 objects per call for new installs.",
+      "claimIds": [
+        "h2"
+      ]
+    },
+    {
+      "text": "Your own workspace (internal app) isn't limited.",
+      "claimIds": [
+        "h3"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "s1",
+      "phase": "prepare",
+      "title": "Copy the Composio callback URL",
+      "detail": "In Composio: Authentication management → Create Auth Config → Slack → OAuth2 → Use your own developer credentials. The redirect URI is https://backend.composio.dev/api/v3/toolkits/auth/callback.",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "Sign in to Composio"
+      ],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "k3"
+      ],
+      "url": "https://platform.composio.dev"
+    },
+    {
+      "id": "s2",
+      "phase": "create",
+      "title": "Create a Slack app",
+      "detail": "At api.slack.com/apps → Create New App → From scratch. Name it (users see this on the consent screen) and pick a development workspace.",
+      "owner": "setup_agent",
+      "takeoverPoints": [
+        "Sign in to Slack"
+      ],
+      "estMinutes": 10,
+      "blockers": [],
+      "claimIds": [
+        "h1"
+      ],
+      "url": "https://api.slack.com/apps"
+    },
+    {
+      "id": "s3",
+      "phase": "configure",
+      "title": "Add the redirect URL and scopes",
+      "detail": "OAuth & Permissions → Redirect URLs: add the Composio callback (HTTPS, no #). Add the bot/user scopes your agent needs, e.g. channels:history, chat:write.",
+      "owner": "setup_agent",
+      "takeoverPoints": [],
+      "estMinutes": 10,
+      "blockers": [],
+      "claimIds": [
+        "h9",
+        "k3"
+      ]
+    },
+    {
+      "id": "s4",
+      "phase": "configure",
+      "title": "Paste the client ID and secret into Composio",
+      "detail": "Basic Information → App Credentials: copy Client ID and Client Secret into the Composio auth config.",
+      "owner": "you",
+      "takeoverPoints": [
+        "Reveal the client secret"
+      ],
+      "estMinutes": 5,
+      "blockers": [],
+      "claimIds": [
+        "k3"
+      ]
+    },
+    {
+      "id": "s5",
+      "phase": "test",
+      "title": "Connect your workspace and run one tool",
+      "detail": "Connect through the new auth config, check the consent screen shows your app's name, and run one Slack tool.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": 10,
+      "blockers": [],
+      "claimIds": [
+        "h3"
+      ]
+    },
+    {
+      "id": "s6",
+      "phase": "launch",
+      "title": "Activate public distribution",
+      "detail": "Manage Distribution → complete the checklist (remove hard-coded secrets, HTTPS redirect) → Activate Public Distribution. Now any workspace can install it.",
+      "owner": "setup_agent_drafts",
+      "takeoverPoints": [
+        "Final 'Activate Public Distribution' click"
+      ],
+      "estMinutes": 15,
+      "blockers": [],
+      "claimIds": [
+        "h1"
+      ]
+    },
+    {
+      "id": "s7",
+      "phase": "submit",
+      "title": "Submit to the Slack Marketplace (to lift the history limit)",
+      "detail": "Once 10 or more workspaces actively use the app, submit it. History, file and admin scopes get an enhanced review; prepare a clear justification for each scope.",
+      "owner": "setup_agent_drafts",
+      "takeoverPoints": [
+        "Final submit"
+      ],
+      "estMinutes": 60,
+      "blockers": [
+        {
+          "text": "Fewer than 10 active workspaces",
+          "workaround": "Grow installs on public distribution first; posting isn't limited meanwhile"
+        }
+      ],
+      "claimIds": [
+        "h5",
+        "h7"
+      ],
+      "url": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide"
+    },
+    {
+      "id": "s8",
+      "phase": "wait",
+      "title": "Marketplace review",
+      "detail": "Up to 10 business days for preliminary feedback, then up to 10 weeks of functional review.",
+      "owner": "you",
+      "takeoverPoints": [],
+      "estMinutes": null,
+      "blockers": [],
+      "claimIds": [
+        "h6"
+      ]
+    }
+  ],
+  "whileYouWait": [
+    {
+      "text": "Keep history-heavy users on Composio managed auth until your listing is approved.",
+      "claimIds": [
+        "k2"
+      ]
+    },
+    {
+      "text": "Installs that happened before the limit started aren't throttled.",
+      "claimIds": [
+        "h4"
+      ]
+    }
+  ],
+  "gotchas": [
+    {
+      "text": "New unlisted installs read history at 1 request/minute and 15 messages per call — too slow for summarizing.",
+      "severity": "blocker",
+      "claimIds": [
+        "h2"
+      ]
+    },
+    {
+      "text": "Marketplace submission needs 10 active workspaces, so plan for a period on public distribution.",
+      "severity": "warn",
+      "claimIds": [
+        "h5"
+      ]
+    },
+    {
+      "text": "History, file and admin scopes trigger an enhanced Marketplace review.",
+      "severity": "warn",
+      "claimIds": [
+        "h7"
+      ]
+    },
+    {
+      "text": "Switching from managed auth to your own OAuth app doesn't migrate existing connections: users reconnect, or you import their credentials where supported.",
+      "severity": "warn",
+      "claimIds": [
+        "k4"
+      ]
+    },
+    {
+      "text": "Turning on PKCE is permanent for the app.",
+      "severity": "info",
+      "claimIds": [
+        "h10"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Whether business, publisher or domain verification is needed for public distribution: none is described, but no page rules it out.",
+    "Marketplace review has only maximum durations; the minimum isn't stated.",
+    "Not yet tested hands-on with a Setup agent."
+  ],
+  "claims": [
+    {
+      "id": "p1",
+      "text": "OAuth discovery found at https://slack.com/.well-known/openid-configuration; no dynamic client registration endpoint",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://slack.com/.well-known/openid-configuration",
+          "quote": "{\"issuer\":\"https://slack.com\",\"authorization_endpoint\":\"https://slack.com/openid/connect/authorize\",\"token_endpoint\":\"https://slack.com/api/openid.connect.token\",\"userinfo_endpoint\":\"https://slack.com/api/openid.connect.userInfo\",\"jwks_uri\":\"https://slack.com/openid/connect/keys\",\"scopes_supported\":[\"openid\",\"profile\",\"email\"],\"response_types_supported\":[\"code\"],\"response_modes_supported\":[\"query\"",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:52:26.982Z"
+        }
+      ],
+      "testedRef": "probe:https://slack.com/.well-known/openid-configuration",
+      "verifier": {
+        "status": "supported",
+        "note": "Deterministic probe"
+      },
+      "checkedAt": "2026-11-09T17:52:26.982Z"
+    },
+    {
+      "id": "k1",
+      "text": "Composio's Slack Toolkit supports OAUTH2 auth.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+          "quote": "auth_schemes: OAUTH2",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:52:45.627Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T17:52:45.627Z"
+    },
+    {
+      "id": "k2",
+      "text": "Composio offers managed auth for Slack.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/custom-app-vs-managed-app",
+          "quote": "managed auth: true",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:52:45.627Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "From the Composio Toolkits API"
+      },
+      "checkedAt": "2026-11-09T17:52:45.627Z"
+    },
+    {
+      "id": "k3",
+      "text": "Register https://backend.composio.dev/api/v3/toolkits/auth/callback as the redirect URI (it stays on /api/v3/ even though the REST API is v3.1).",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/white-labeling-authentication",
+          "quote": "Register `https://backend.composio.dev/api/v3/toolkits/auth/callback` as the provider's authorized redirect URI.",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:52:45.627Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified"
+      },
+      "checkedAt": "2026-11-09T17:52:45.627Z"
+    },
+    {
+      "id": "k4",
+      "text": "Switching to your own auth config doesn't move existing connected accounts; users reconnect, or you import their credentials where supported.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.composio.dev/docs/authentication/white-labeling-authentication",
+          "quote": "Existing connected accounts are tied to the auth config they were created with.",
+          "official": true,
+          "retrievedAt": "2026-11-09T17:52:45.627Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified"
+      },
+      "checkedAt": "2026-11-09T17:52:45.627Z"
+    },
+    {
+      "id": "h1",
+      "text": "Public distribution is switched on from the app's Manage Distribution page by completing a checklist; no review step is described. Review applies to Slack Marketplace listing, which Slack recommends for commercial apps.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/app-management/distribution",
+          "quote": "Ensure all items in the supplied checklist are completed.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "partial",
+        "note": "No page says 'no review' verbatim; the distribution flow has no review step"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h2",
+      "text": "Commercially distributed apps outside the Marketplace created after 2025-05-29 (and new installs of existing ones) get conversations.history and conversations.replies at 1 request/minute, max 15 objects.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps",
+          "quote": "The new rate limits will be updated to allow 1 request per minute and will return a maximum of 15 objects per request.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h3",
+      "text": "Internal, customer-built apps are not affected by the non-Marketplace rate limits.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps",
+          "quote": "Internal customer-built applications are not impacted by these changes.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h4",
+      "text": "The limits don't apply to existing installations of unlisted distributed apps.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps",
+          "quote": "will not be applied to existing installations of unlisted, distributed applications",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h5",
+      "text": "Marketplace submission needs 10 or more active workspaces (used in the past 28 days).",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide",
+          "quote": "Your app has been installed on 10 or more active workspaces",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h6",
+      "text": "Marketplace review: up to 10 business days for preliminary feedback, then up to 10 weeks of functional review for new submissions.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide",
+          "quote": "takes up to 10 weeks for new submissions and 6 weeks for published apps resubmitting changes",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h7",
+      "text": "Marketplace submissions requesting history, file, canvas or admin scopes get an enhanced review.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/slack-marketplace/slack-marketplace-app-guidelines-and-requirements",
+          "quote": "your submission will be subject to an enhanced review, to reduce the risk of unexpected behavior.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h8",
+      "text": "Slack may run its own penetration testing during Marketplace review, at its discretion; it is not a required third-party assessment.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://slack.com/blog/developers/slack-marketplace-review-process",
+          "quote": "In some instances, additional testing, including penetration testing, is carried out at Slack's discretion.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h9",
+      "text": "OAuth redirect URIs must use HTTPS and can't contain #.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/authentication/installing-with-oauth",
+          "quote": "The redirect_uri must use HTTPS.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "h10",
+      "text": "PKCE is an app-level setting (pkce_enabled) that can't be turned off once enabled.",
+      "evidence": "documented",
+      "sources": [
+        {
+          "url": "https://docs.slack.dev/reference/app-manifest",
+          "quote": "A boolean that specifies whether or not PKCE is enabled for the OAuth flow.",
+          "official": true,
+          "retrievedAt": "2026-11-09T00:00:00.000Z"
+        }
+      ],
+      "verifier": {
+        "status": "supported",
+        "note": "Hand-verified against the page, 2026-11-09"
+      },
+      "checkedAt": "2026-11-09T00:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "generatedAt": "2026-11-09T00:00:00.000Z",
+    "origin": "curated",
+    "reviewStatus": "reviewed",
+    "model": "groq:openai/gpt-oss-120b"
+  }
+}

@@ -1,4 +1,4 @@
-// End-to-end check for Stages 0–7: pnpm tsx scripts/try-generate.ts "<query>" [--save]
+// End-to-end check for Stages 0–7: pnpm tsx scripts/try-generate.ts "<query>" [--save] [--out file.json]
 import { config } from "dotenv";
 config({ path: ".env.local" });
 
@@ -9,7 +9,9 @@ async function main() {
   const { formatLevel } = await import("../lib/rubric");
   const args = process.argv.slice(2);
   const save = args.includes("--save");
-  const r = await resolve(args.filter((a) => a !== "--save").join(" "));
+  const outAt = args.indexOf("--out");
+  const outFile = outAt >= 0 ? args[outAt + 1] : null;
+  const r = await resolve(args.filter((a, i) => a !== "--save" && i !== outAt && i !== outAt + 1).join(" "));
   if (r.kind !== "resolved") return console.log(JSON.stringify(r, null, 2));
   const t0 = Date.now();
   const usage = emptyUsage();
@@ -26,6 +28,13 @@ async function main() {
   console.log(`Claims ${guide.claims.length} (${["tested", "documented", "reported", "unverified"].map((e) => `${e} ${guide.claims.filter((x) => x.evidence === e).length}`).join(", ")}); steps ${guide.steps.length}; unknowns ${guide.unknowns.length}`);
   guide.unknowns.slice(0, 5).forEach((u) => console.log(`  ? ${u}`));
   console.log(`LLM: ${usage.calls} calls, ${usage.inputTokens} in / ${usage.outputTokens} out; ${guide.meta.durationSec}s`);
+  if (outFile) {
+    const { mkdirSync, writeFileSync } = await import("node:fs");
+    const { dirname } = await import("node:path");
+    mkdirSync(dirname(outFile), { recursive: true });
+    writeFileSync(outFile, `${JSON.stringify(guide, null, 2)}\n`);
+    console.log(`Wrote ${outFile}`);
+  }
   if (save) {
     const { saveGuide } = await import("../lib/guides");
     console.log(`Saved version ${await saveGuide(guide, r.product)}`);

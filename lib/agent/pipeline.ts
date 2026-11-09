@@ -7,7 +7,7 @@ import { emptyUsage, MODELS, type Usage } from "../llm";
 import { runProbes } from "../probes";
 import { computeGuide } from "../rubric";
 import { Guide, type JobEvent } from "../schema";
-import { COMPOSIO_CUSTOM_AUTH_DOC, composioClaims, findingClaims, probeClaims, unanswered } from "./claims";
+import { COMPOSIO_CALLBACK_URL, COMPOSIO_CUSTOM_AUTH_DOC, composioClaims, findingClaims, probeClaims, unanswered } from "./claims";
 import { GATE_QUESTIONS, QUESTIONS, research } from "./research";
 import type { ResolvedProduct } from "./resolve";
 import { synthesize } from "./synthesize";
@@ -50,13 +50,14 @@ export async function generateGuide(product: ResolvedProduct, opts: { emit?: Emi
         toolkitSlug: toolkit.slug,
         managedAuthAvailable: toolkit.managedAuthAvailable,
         authSchemes: toolkit.authSchemes,
-        callbackUrl: "Shown in the Composio dashboard when you create the auth config",
+        callbackUrl: COMPOSIO_CALLBACK_URL,
         authGuideUrl: toolkit.authGuideUrl ?? COMPOSIO_CUSTOM_AUTH_DOC,
-        claimIds: ["k1", "k2"],
+        claimIds: ["k1", "k2", "k3"],
       }
     : null;
   const notFound = res.findings.filter((f) => f.answer === "not_found" && f.gateKey).map((f) => `${f.gateKey}: ${f.finding}`);
   const draft = await synthesize({ product, claims, notFound, composio, usage });
+  if (composio) draft.gotchas.push({ text: "Switching from managed auth to your own OAuth app doesn't migrate existing connections: users reconnect, or you import their credentials where supported.", severity: "warn", claimIds: ["k4"] });
   for (const id of conflicts) draft.gotchas.push({ text: "Sources disagree on this point; check the cited pages.", severity: "warn", claimIds: [id] });
   if (res.unansweredGates.length) draft.unknowns.push(`Research didn't reach: ${res.unansweredGates.map((k) => GATE_QUESTIONS[k]).join(" ")}`);
 

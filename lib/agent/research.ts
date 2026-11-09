@@ -29,7 +29,7 @@ export type QuestionId = keyof typeof QUESTIONS;
 
 export const GATE_QUESTIONS: Record<GateKeyT, string> = {
   partner_application: "Must you join a partner program or paid tier to get API/OAuth access?",
-  manual_approval_uncertain: "Is access granted by manual approval with no guaranteed outcome?",
+  manual_approval_uncertain: "Is API access granted at the provider's discretion with no published criteria (e.g. invite-only or partner-only APIs)? A review with published requirements is not this.",
   security_assessment: "Is a third-party security assessment or audit required?",
   business_verification: "Must the business/organization be verified?",
   publisher_verification: "Must the publisher/developer identity be verified?",
@@ -80,9 +80,20 @@ const EXTRA_QUERIES = [(n: string) => `${n} OAuth app review rejected problem fo
 const MAX_PAGES = 10; // Tavily extract: 1 credit per 5 URLs
 const EVIDENCE_CHARS = 13_000; // ~3.3K tokens per extraction call
 
+// Providers often split docs across sibling domains (slack.com / slack.dev, notion.so / notion.com).
+// Same name on a mainstream TLD counts as official; blogs like slack.green don't.
+const SIBLING_TLDS = new Set(["com", "dev", "so", "io", "app", "co", "net", "org", "cloud"]);
+
 function officialDomains(p: ResolvedProduct) {
   const ds = [p.domain, p.devPortalUrl, ...p.docsCandidates].map((u) => (u ? registrableDomain(u) : null));
-  return new Set(ds.filter((d): d is string => !!d));
+  const domains = new Set(ds.filter((d): d is string => !!d));
+  const names = new Set([...domains].map((d) => d.split(".")[0]));
+  return (url: string) => {
+    const d = registrableDomain(url);
+    if (!d) return false;
+    const [name, ...tld] = d.split(".");
+    return domains.has(d) || (names.has(name) && SIBLING_TLDS.has(tld.join(".")));
+  };
 }
 
 // --- Extract ---
@@ -97,7 +108,7 @@ const LlmFinding = z.object({
 const LlmGate = z.object({
   answer: z.enum(["yes", "no", "not_found"]),
   finding: z.string().describe("The answer in one sentence; for not_found, what the sources do and don't say"),
-  applies_to: z.enum(["production", "listing_only", "both"]).describe("Whether this applies to authorizing users outside your org, or only to an optional marketplace/directory listing"),
+  applies_to: z.enum(["production", "listing_only", "both"]).optional().describe("Whether this applies to authorizing users outside your org, or only to an optional marketplace/directory listing"),
   source: SourceRef.nullable().describe("null only for not_found"),
   quote: z.string().describe("Exact text from the source; empty only for not_found"),
 });
@@ -106,7 +117,8 @@ const GatesOut = GroupOut.extend({ gates: z.object(Object.fromEntries(GATE_KEYS.
 
 const EXTRACT_SYSTEM = `You extract facts about registering an OAuth app with a provider and getting it to Production (users outside the developer's own org can authorize at the volume they need).
 Use only the numbered sources given. Each finding cites one source id and quotes it exactly (under 40 words, copied verbatim). One fact per finding; 1-4 findings per question; skip a question the sources don't address.
-Prefer official sources. Never estimate durations a source doesn't state. Keep production access review, scope verification and marketplace listing review apart.`;
+Prefer official sources. Never estimate durations a source doesn't state. Keep production access review, scope verification and marketplace listing review apart.
+Only facts about this product's API and OAuth apps. Skip other products from the same company, unrelated APIs, company news and opinion.`;
 
 const GATES_RULES = `For "gates", answer every key. "yes" or "no" needs a quote that says so explicitly. If the sources are silent, answer not_found: silence is never "no".
 A gate is about registering or distributing an OAuth app. Unrelated product features (e.g. workspace admin settings) don't count. Set applies_to: "listing_only" when the requirement is only for an optional marketplace/directory listing.
@@ -123,8 +135,7 @@ export async function research(opts: {
   const { product } = opts;
   const emit = async (e: ResearchEvent) => opts.emit?.(e);
   const name = product.productName;
-  const official = officialDomains(product);
-  const isOfficial = (url: string) => official.has(registrableDomain(url) ?? "");
+  const isOfficial = officialDomains(product);
 
   // 1. Searches, in parallel. Each group keeps its own results for snippets.
   const queries = [...GROUPS.map((g) => g.query(name)), ...EXTRA_QUERIES.map((q) => q(name))];
@@ -194,7 +205,7 @@ ${sources.map((s) => `[${s.id}] ${s.url} (${s.official ? "official" : "community
           const s = a.source ? byId.get(a.source) : undefined;
           // A yes/no without a real source can't stand; downgrade it.
           const answer = a.answer !== "not_found" && (!s || !a.quote.trim()) ? "not_found" : a.answer;
-          await add({ questionId: "q_gates", gateKey: k, answer, finding: a.finding, url: s?.url ?? null, quote: answer === "not_found" ? "" : a.quote, official: s?.official ?? false, pageDate: s?.date ?? null, appliesTo: a.applies_to });
+          await add({ questionId: "q_gates", gateKey: k, answer, finding: a.finding, url: s?.url ?? null, quote: answer === "not_found" ? "" : a.quote, official: s?.official ?? false, pageDate: s?.date ?? null, appliesTo: a.applies_to ?? "both" });
         }
     }),
   );
