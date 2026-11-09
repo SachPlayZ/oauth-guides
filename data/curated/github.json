@@ -14,7 +14,8 @@
       "Personal access token (single user only)"
     ],
     "claimIds": [
-      "c3"
+      "c3",
+      "t4"
     ]
   },
   "composio": {
@@ -43,63 +44,63 @@
           "key": "partner_application",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "manual_approval_uncertain",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "security_assessment",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "business_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "publisher_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "domain_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "scope_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "production_access_review",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "min_installs",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         }
       ],
@@ -120,63 +121,63 @@
           "key": "partner_application",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "manual_approval_uncertain",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "security_assessment",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "business_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "publisher_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "domain_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "scope_verification",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "production_access_review",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         },
         {
           "key": "min_installs",
           "answer": "no",
           "claimIds": [
-            "c11"
+            "t1"
           ]
         }
       ],
@@ -186,7 +187,8 @@
           "label": "Each org's owners must approve your OAuth app before members can grant it access to org repos",
           "claimIds": [
             "c4",
-            "c5"
+            "c5",
+            "t7"
           ]
         }
       ],
@@ -218,7 +220,7 @@
       "id": "s1",
       "phase": "prepare",
       "title": "Copy the Composio callback URL",
-      "detail": "In Composio: Authentication management \u2192 Create Auth Config \u2192 GitHub \u2192 OAuth2 \u2192 Use your own developer credentials. Copy the redirect URI it shows: https://backend.composio.dev/api/v3/toolkits/auth/callback (it stays on /api/v3/ even though Composio's REST API is v3.1). GitHub needs an exact match unless you enable wildcard matching.",
+      "detail": "In Composio: Authentication management → Create Auth Config → GitHub → OAuth2 → Use your own developer credentials. Copy the redirect URI it shows: https://backend.composio.dev/api/v3/toolkits/auth/callback (it stays on /api/v3/ even though Composio's REST API is v3.1). GitHub needs an exact match unless you enable wildcard matching.",
       "owner": "setup_agent",
       "takeoverPoints": [
         "Composio login"
@@ -235,13 +237,13 @@
       "id": "s2",
       "phase": "create",
       "title": "Register a new OAuth app on GitHub",
-      "detail": "Profile picture \u2192 Settings \u2192 Developer settings \u2192 OAuth Apps \u2192 New OAuth App. Fill in Application name (shown on the consent screen), Homepage URL and Authorization callback URL (paste the Composio URL). Register under an org account if the app belongs to your company.",
+      "detail": "Profile picture → Settings → Developer settings → OAuth Apps → New OAuth App. Fill in Application name (shown on the consent screen), Homepage URL and Authorization callback URL (paste the Composio URL). Register under an org account if the app belongs to your company.",
       "owner": "setup_agent",
       "takeoverPoints": [
         "GitHub login",
         "2FA"
       ],
-      "estMinutes": 5,
+      "estMinutes": 3,
       "url": "https://github.com/settings/applications/new",
       "blockers": [
         {
@@ -252,7 +254,9 @@
       "claimIds": [
         "c1",
         "c2",
-        "c8"
+        "c8",
+        "t1",
+        "t2"
       ]
     },
     {
@@ -262,7 +266,8 @@
       "detail": "On the app page, click Generate a new client secret and copy it immediately. GitHub shows it only once.",
       "owner": "you",
       "takeoverPoints": [
-        "Secret reveal (sudo / 2FA prompt)"
+        "Copying the secret (shown once)",
+        "Sudo / 2FA prompt if your sign-in is older"
       ],
       "estMinutes": 3,
       "url": "https://github.com/settings/developers",
@@ -359,6 +364,20 @@
       "claimIds": [
         "c12"
       ]
+    },
+    {
+      "text": "The consent screen says \"Authorizing will redirect to https://backend.composio.dev\", so users see Composio's domain even with your own app. To show yours, register a redirect on your domain that 302-forwards to Composio's callback.",
+      "severity": "warn",
+      "claimIds": [
+        "t5"
+      ]
+    },
+    {
+      "text": "A brand-new app shows \"Created less than a day ago\" and \"Fewer than 10 GitHub users\" on the consent screen. Own it from an org (not a personal account) so the consent screen names your company.",
+      "severity": "info",
+      "claimIds": [
+        "t6"
+      ]
     }
   ],
   "unknowns": [
@@ -367,7 +386,7 @@
   "claims": [
     {
       "id": "c1",
-      "text": "OAuth apps are created under profile picture \u2192 Settings \u2192 Developer settings \u2192 OAuth apps.",
+      "text": "OAuth apps are created under profile picture → Settings → Developer settings → OAuth apps.",
       "evidence": "documented",
       "sources": [
         {
@@ -596,11 +615,145 @@
         "note": "Exact-match rule verified; loopback-port detail from a truncated section"
       },
       "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "t1",
+      "text": "Registering an OAuth app completed instantly: no review, verification or questionnaire before the app page (with client ID) appeared.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://github.com/settings/applications/new",
+          "quote": "Application created successfully",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/github/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t2",
+      "text": "The registration form takes a list of up to 10 redirect URIs, with wildcard matching off and expiring user tokens on by default.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://github.com/settings/applications/new",
+          "quote": "You may add up to 10 redirect URIs.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/github/attempt.md#what-the-registration-form-looks-like-now",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t3",
+      "text": "A redirect_uri that isn't registered is rejected, including a sub-path of a registered URI: matching is exact unless wildcard matching is enabled.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://github.com/login/oauth/authorize",
+          "quote": "The redirect_uri is not associated with this application.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/github/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t4",
+      "text": "PKCE with S256 is accepted; code_challenge_method=plain is rejected at the authorize endpoint.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://github.com/login/oauth/authorize",
+          "quote": "(code_challenge_method 'plain' is not supported.)",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/github/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t5",
+      "text": "The consent screen tells users 'Authorizing will redirect to https://backend.composio.dev' and shows the owner's display name, so with Composio's callback users see Composio's domain.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://github.com/login/oauth/authorize",
+          "quote": "Authorizing will redirect to https://backend.composio.dev",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/github/attempt.md#consent-screen-what-your-users-see",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t6",
+      "text": "New apps show trust badges on the consent screen: 'Created less than a day ago' and 'Fewer than 10 GitHub users'.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://github.com/login/oauth/authorize",
+          "quote": "Fewer than 10 GitHub users",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/github/attempt.md#consent-screen-what-your-users-see",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t7",
+      "text": "The consent screen lists each of the user's orgs with Request (owner approval needed) or Grant (user is an owner), confirming org access restrictions per org.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://github.com/login/oauth/authorize",
+          "quote": "Organization access",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/github/attempt.md#consent-screen-what-your-users-see",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
     }
   ],
   "meta": {
     "generatedAt": "2026-11-09T00:00:00.000Z",
     "origin": "curated",
-    "reviewStatus": "reviewed"
+    "reviewStatus": "reviewed",
+    "testedAt": "2026-11-10"
   }
 }

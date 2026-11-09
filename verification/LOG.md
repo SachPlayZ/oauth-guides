@@ -2,9 +2,9 @@
 
 Checked 2026-11-09. Each agent draft (`<slug>/draft-v1.json`) was compared, claim by claim, against the official pages. Every row below was read on the page itself, not taken from the agent's quote. Reviewed Guides are in `<slug>/final.json` (= `data/curated/<slug>.json`).
 
-**Summary:** 50 Claims across 5 Guides (GitHub, Slack, Gmail, Notion, plus Composio facts shared by all) — ✅ 22 confirmed · ✏️ 16 corrected · ⚠️ 8 partial · ❓ 4 couldn't verify
+**Summary:** 52 Claims across 5 Guides (GitHub, Slack, Gmail, Notion, plus Composio facts shared by all) — ✅ 25 confirmed · ✏️ 16 corrected · ⚠️ 8 partial · ❓ 3 couldn't verify
 
-**Not done:** hands-on Setup agent attempts (PLAN §17). No Claim is labeled Tested except deterministic probes.
+**Hands-on:** one Setup agent attempt, for GitHub (2026-11-10, [evidence/github/attempt.md](../evidence/github/attempt.md)). It added Tested Claims t1–t7 and moved GitHub to high confidence. The Slack, Gmail and Notion attempts weren't done; their only Tested Claims come from deterministic probes.
 
 ## Error patterns
 
@@ -86,7 +86,9 @@ Checked 2026-11-09. Each agent draft (`<slug>/draft-v1.json`) was compared, clai
 | GitHub | PKCE | S256 only | Confirmed; `plain` rejected | ✅ | docs.github.com/…/authorizing-oauth-apps |
 | GitHub | Org access restrictions | On by default for new orgs | Confirmed | ✅ | docs.github.com/…/about-oauth-app-access-restrictions |
 | GitHub | OAuth apps per owner | 100 | Confirmed | ✅ | creating-an-oauth-app |
-| GitHub | No review | No review | No review step described; nothing says so verbatim | ❓ | authorizing-oauth-apps |
+| GitHub | No review | No review | No review step described in docs; **the hands-on attempt registered instantly with no review** | ✅ | evidence/github/attempt.md |
+| GitHub | Redirect exact match | Not stated | Sub-path of a registered URI rejected (tested) | ✅ | evidence/github/attempt.md |
+| GitHub | Consent screen redirect domain | — | Shows "Authorizing will redirect to https://backend.composio.dev" (tested; new gotcha) | ✅ | evidence/github/attempt.md |
 
 ## Levels: draft vs reviewed
 

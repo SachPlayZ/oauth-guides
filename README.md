@@ -110,11 +110,11 @@ A live Guide costs **$0** in model fees and about 8 Tavily credits (ADR-0004).
 
 ## What was checked
 
-[verification/LOG.md](verification/LOG.md) records 50 Claims across GitHub, Slack, Gmail, Notion and the shared Composio facts. Each was checked by hand against the official page:
-- ✅ **22** confirmed
+[verification/LOG.md](verification/LOG.md) records 52 Claims across GitHub, Slack, Gmail, Notion and the shared Composio facts. Each was checked by hand against the official page:
+- ✅ **25** confirmed
 - ✏️ **16** corrected
 - ⚠️ **8** partly right
-- ❓ **4** couldn't verify
+- ❓ **3** couldn't verify
 
 The agent drafts (`draft-v1`, `draft-v2`) and the reviewed `final.json` sit next to the log.
 
@@ -137,10 +137,23 @@ Seed facts that turned out wrong:
 
 | Guide | Level | Claims | Tested | Documented | Reported | Unverified |
 |---|---|---|---|---|---|---|
-| GitHub | R1 | 13 | 0 | 12 | 0 | 1 |
+| GitHub | R1 · **high** | 20 | 7 | 12 | 0 | 1 |
 | Slack | R2–R3? | 15 | 1 | 14 | 0 | 0 |
 | Gmail | R4 | 15 | 1 | 14 | 0 | 0 |
 | Notion | R0 | 14 | 0 | 13 | 1 | 0 |
+
+### Setup agent attempt: GitHub
+
+[evidence/github/attempt.md](evidence/github/attempt.md) records the attempt on 2026-11-10. Claude Code drove the built-in browser and created a real GitHub OAuth app wired to Composio's callback. It took 2.5 minutes end to end, about 40 s of which was the developer's handover.
+
+| Observed | Effect on the Guide |
+|---|---|
+| Registration completed instantly, with no review step | The "no" Gate answers now rest on a **Tested** Claim. Confidence went from low to **high**. |
+| The developer had to take over three times: sign-in with 2FA (GitHub Mobile push), copying the client secret, and clicking Authorize | Matches the step owners. The agent never read the secret. |
+| Unregistered redirect URIs are rejected, **including a sub-path** of the registered one; PKCE `plain` is rejected | Exact-match redirects and S256-only PKCE are now Tested |
+| The consent screen says **"Authorizing will redirect to https://backend.composio.dev"** | New gotcha: users see Composio's domain unless you 302-forward from your own |
+| New apps show "Created less than a day ago · Fewer than 10 GitHub users" | New gotcha: own the app from an org so users see a company name |
+| The form now takes a list of up to 10 redirect URIs, with wildcard matching off and expiring tokens on by default | Older docs and screenshots show a single callback field |
 
 ### Stress tests
 
@@ -170,7 +183,7 @@ PLAN §20, run 2026-11-10 from `scripts/stress.ts`. No query crashed.
 
 ## Limitations
 
-- **No Setup agent attempts were completed.** Step owners and handoff points are based on documented flows, not observed runs. "Tested" means deterministic probes only.
+- **Only one Setup agent attempt (GitHub).** For Slack, Gmail and Notion, step owners and handoff points come from documented flows, not observed runs, and "Tested" means deterministic probes only. No approval was completed.
 - **Durations are what providers state.** There's no data on observed approval times, and no approvals were completed.
 - **Generated Guides are unreviewed**, and the agent still makes mistakes: invented usage rows, and an occasional default row with unsettled Gates. Low confidence and level ranges make this visible, but don't prevent it.
 - **JavaScript-rendered docs** sometimes can't be read or quote-checked, which lowers confidence.
