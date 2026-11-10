@@ -10,17 +10,15 @@ export const maxDuration = 300;
 const FRESH_MS = 30 * 24 * 3_600_000;
 const Body = z.object({
   query: z.string().trim().min(1).max(200),
-  passcode: z.string().optional(),
   product: z.custom<ResolvedProduct>((v) => !!v && typeof v === "object" && typeof (v as ResolvedProduct).slug === "string").optional(),
   regenerate: z.boolean().optional(),
 });
 
-// POST {query, passcode, product?, regenerate?} → {jobId} | {candidates} | {existingSlug} | {error}
+// POST {query, product?, regenerate?} → {jobId} | {candidates} | {existingSlug} | {error}
 export async function POST(req: NextRequest) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "Type an app name or paste its website." }, { status: 400 });
-  const { query, passcode, regenerate } = parsed.data;
-  if (process.env.DEMO_PASSCODE && passcode !== process.env.DEMO_PASSCODE) return Response.json({ error: "Wrong passcode." }, { status: 401 });
+  const { query, regenerate } = parsed.data;
 
   let product = parsed.data.product;
   if (!product) {

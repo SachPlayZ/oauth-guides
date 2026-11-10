@@ -2,7 +2,7 @@
 
 **How long until your users can connect App X through *your own* OAuth app, and what's in the way.**
 
-Live: **https://oauth-runway-three.vercel.app** · Generating a Guide needs the demo passcode (shared in the submission notes, not here).
+Live: **https://oauth-runway-three.vercel.app**. No sign-in or passcode is needed.
 
 A developer building an agent on Composio starts with Composio's managed OAuth apps. Before launch, many need their own OAuth app: for their brand on the consent screen, custom scopes, their own quota, faster polling, or because the Toolkit has no managed app. Registering one takes minutes with GitHub. With Gmail it takes weeks, plus a paid security assessment. Provider docs explain the clicks, but they don't say up front how long it takes, what will block you, or what to do while you wait. OAuth Runway answers those questions first, and it says how sure it is.
 
@@ -188,7 +188,7 @@ PLAN §20, run 2026-11-10 from `scripts/stress.ts`. No query crashed.
 - **Generated Guides are unreviewed**, and the agent still makes mistakes: invented usage rows, and an occasional default row with unsettled Gates. Low confidence and level ranges make this visible, but don't prevent it.
 - **JavaScript-rendered docs** sometimes can't be read or quote-checked, which lowers confidence.
 - **Guides go stale.** Each one shows "last checked"; nothing re-runs automatically.
-- **Free-tier limits**: Groq allows 8K tokens/minute per model, and Tavily allows 1,000 credits/month. Generation is behind a passcode and capped at 5 runs/hour per IP and 30/hour overall.
+- **Free-tier limits**: Groq allows 8K tokens/minute per model, and Tavily allows 1,000 credits/month. Generation is open but capped at 5 runs/hour per IP and 30/hour overall, and a Guide newer than 30 days is reused instead of regenerated.
 
 ## Next steps
 
@@ -205,7 +205,7 @@ You need Node 22, pnpm and Docker (or a Neon database).
 
 ```bash
 pnpm install
-cp .env.example .env.local   # fill in GROQ_API_KEY, TAVILY_API_KEY, COMPOSIO_API_KEY, DEMO_PASSCODE
+cp .env.example .env.local   # fill in GROQ_API_KEY, TAVILY_API_KEY, COMPOSIO_API_KEY
 pnpm db:up                   # local Postgres on :54329, or set DATABASE_URL to Neon
 pnpm db:push                 # create tables
 pnpm tsx scripts/seed-library.ts   # 100 Toolkits into the directory (uses data/library.json if Composio is unreachable)

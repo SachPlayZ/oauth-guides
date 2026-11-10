@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ResolvedProduct } from "@/lib/agent/resolve";
-import { useLocalStorage } from "@/lib/use-local-storage";
 import { cn } from "@/lib/utils";
 
 type Ev = { id: number; ts: string; type: string; payload: Record<string, unknown> };
@@ -17,7 +16,6 @@ type Phase =
   | { kind: "error"; message: string };
 
 const STAGES = ["Resolve", "Probe", "Research", "Check quotes", "Verify", "Write", "Score"] as const;
-const PASS_KEY = "runway:passcode";
 
 /** Which stages are done, from the event stream. */
 function stagesDone(events: Ev[], resolved: boolean): number {
@@ -54,9 +52,6 @@ function describe(e: Ev): string {
 export function GenerateRun() {
   const router = useRouter();
   const q = useSearchParams().get("q") ?? "";
-  const [savedPasscode, savePasscode] = useLocalStorage(PASS_KEY);
-  const [typed, setPasscode] = useState<string | null>(null);
-  const passcode = typed ?? savedPasscode;
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
   const [events, setEvents] = useState<Ev[]>([]);
   const [startedAt, setStartedAt] = useState<number | null>(null);
@@ -66,14 +61,13 @@ export function GenerateRun() {
   const start = useCallback(
     async (opts: { product?: ResolvedProduct; regenerate?: boolean } = {}) => {
       if (!q.trim()) return;
-      savePasscode(passcode);
       setPhase({ kind: "resolving" });
       setEvents([]);
       setStartedAt(Date.now());
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ query: q, passcode, ...opts }),
+        body: JSON.stringify({ query: q, ...opts }),
       });
       const data = await res.json().catch(() => ({ error: "Something went wrong. Try again." }));
       if (data.error) setPhase({ kind: "error", message: data.error });
@@ -81,7 +75,7 @@ export function GenerateRun() {
       else if (data.existingSlug) setPhase({ kind: "existing", slug: data.existingSlug, product: data.product });
       else setPhase({ kind: "running", jobId: data.jobId, product: data.product });
     },
-    [q, passcode, savePasscode],
+    [q],
   );
 
   // Poll the job every second.
@@ -113,13 +107,13 @@ export function GenerateRun() {
     return () => clearInterval(t);
   }, [phase.kind]);
 
-  // With a saved passcode, start straight away.
+  // Start as soon as the page opens.
   useEffect(() => {
-    if (!started.current && passcode && q) {
+    if (!started.current && q) {
       started.current = true;
       start();
     }
-  }, [passcode, q, start]);
+  }, [q, start]);
 
   if (!q) return <p>Type an app name in the <Link href="/" className="underline">directory</Link> search.</p>;
 
@@ -135,25 +129,11 @@ export function GenerateRun() {
         <h1 className="text-2xl font-semibold tracking-tight">{productName}</h1>
       </div>
 
-      {(phase.kind === "idle" || phase.kind === "error") && (
-        <form
-          className="flex max-w-md flex-wrap gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            start();
-          }}
-        >
-          <input
-            type="password"
-            value={passcode}
-            onChange={(e) => setPasscode(e.target.value)}
-            placeholder="Demo passcode"
-            aria-label="Demo passcode"
-            className="h-10 flex-1 rounded-lg border bg-background px-3"
-          />
-          <button className="h-10 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground">Generate</button>
-          {phase.kind === "error" && <p className="w-full text-sm text-red-600">{phase.message}</p>}
-        </form>
+      {phase.kind === "error" && (
+        <div className="space-y-3">
+          <p className="text-sm text-red-600">{phase.message}</p>
+          <button onClick={() => start()} className="h-10 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground">Try again</button>
+        </div>
       )}
 
       {phase.kind === "resolving" && <p className="text-sm text-muted-foreground">Identifying the app… {elapsed}s</p>}
