@@ -4,6 +4,8 @@
 
 Live: **https://oauth-runway-three.vercel.app**. No sign-in or passcode is needed.
 
+Video walkthrough: **https://youtu.be/OQkae-8o6ZI**
+
 A developer building an agent on Composio starts with Composio's managed OAuth apps. Before launch, many need their own OAuth app: for their brand on the consent screen, custom scopes, their own quota, faster polling, or because the Toolkit has no managed app. Registering one takes minutes with GitHub. With Gmail it takes weeks, plus a paid security assessment. Provider docs explain the clicks, but they don't say up front how long it takes, what will block you, or what to do while you wait. OAuth Runway answers those questions first, and it says how sure it is.
 
 ## Try it
