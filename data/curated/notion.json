@@ -53,7 +53,8 @@
           "answer": "no",
           "claimIds": [
             "h1",
-            "f5"
+            "f5",
+            "t1"
           ]
         },
         {
@@ -67,21 +68,24 @@
           "key": "business_verification",
           "answer": "no",
           "claimIds": [
-            "h5"
+            "h5",
+            "t1"
           ]
         },
         {
           "key": "publisher_verification",
           "answer": "no",
           "claimIds": [
-            "h5"
+            "h5",
+            "t1"
           ]
         },
         {
           "key": "domain_verification",
           "answer": "no",
           "claimIds": [
-            "h5"
+            "h5",
+            "t1"
           ]
         },
         {
@@ -96,7 +100,8 @@
           "answer": "no",
           "claimIds": [
             "h1",
-            "f5"
+            "f5",
+            "t1"
           ]
         },
         {
@@ -131,7 +136,8 @@
           "answer": "no",
           "claimIds": [
             "h1",
-            "f5"
+            "f5",
+            "t1"
           ]
         },
         {
@@ -145,21 +151,24 @@
           "key": "business_verification",
           "answer": "no",
           "claimIds": [
-            "h5"
+            "h5",
+            "t1"
           ]
         },
         {
           "key": "publisher_verification",
           "answer": "no",
           "claimIds": [
-            "h5"
+            "h5",
+            "t1"
           ]
         },
         {
           "key": "domain_verification",
           "answer": "no",
           "claimIds": [
-            "h5"
+            "h5",
+            "t1"
           ]
         },
         {
@@ -174,7 +183,8 @@
           "answer": "no",
           "claimIds": [
             "h1",
-            "f5"
+            "f5",
+            "t1"
           ]
         },
         {
@@ -214,7 +224,7 @@
       "id": "s1",
       "phase": "prepare",
       "title": "Copy the Composio callback URL",
-      "detail": "In Composio: Authentication management \u2192 Create Auth Config \u2192 Notion \u2192 OAuth2 \u2192 Use your own developer credentials. The redirect URI is https://backend.composio.dev/api/v3/toolkits/auth/callback.",
+      "detail": "In Composio: Authentication management → Create Auth Config → Notion → OAuth2 → Use your own developer credentials. The redirect URI is https://backend.composio.dev/api/v3/toolkits/auth/callback.",
       "owner": "setup_agent",
       "takeoverPoints": [
         "Sign in to Composio"
@@ -230,14 +240,14 @@
       "id": "s2",
       "phase": "create",
       "title": "Create a public connection in Notion",
-      "detail": "In Notion's developer portal create a new public connection: name, development workspace, the redirect URI from step 1, installation scope and capabilities. Choose \"Any workspace\" \u2014 the scope can't be changed later.",
+      "detail": "At app.notion.com/developers/connections → New connection: name it, choose OAuth (not API token), keep \"Installable in: Any workspace\" and add the Composio redirect URI. Then trim the default capabilities to what your agent needs.",
       "owner": "setup_agent",
       "takeoverPoints": [
         "Sign in to Notion",
         "Choose installation scope and capabilities"
       ],
-      "estMinutes": 10,
-      "url": "https://www.notion.so/profile/integrations",
+      "estMinutes": 3,
+      "url": "https://app.notion.com/developers/connections",
       "blockers": [
         {
           "text": "Installation scope is fixed once created",
@@ -246,7 +256,9 @@
       ],
       "claimIds": [
         "h5",
-        "h2"
+        "h2",
+        "t1",
+        "t6"
       ]
     },
     {
@@ -280,7 +292,7 @@
     {
       "id": "s5",
       "phase": "launch",
-      "title": "Ship it \u2014 no review needed",
+      "title": "Ship it — no review needed",
       "detail": "Any workspace can now install the connection through your Composio flow. Listing in the Notion Marketplace is optional and adds a security review.",
       "owner": "you",
       "takeoverPoints": [],
@@ -320,12 +332,25 @@
       "claimIds": [
         "f3"
       ]
+    },
+    {
+      "text": "The consent screen shows \"backend.composio.dev\" next to your connection's name. Use your own callback domain that forwards to Composio if that matters.",
+      "severity": "info",
+      "claimIds": [
+        "t5",
+        "h1"
+      ]
+    },
+    {
+      "text": "New connections default to reading user emails and inserting comments; untick capabilities you don't use.",
+      "severity": "info",
+      "claimIds": [
+        "t4"
+      ]
     }
   ],
   "unknowns": [
-    "Notion's docs don't state redirect URI rules (HTTPS-only, exact match).",
     "PKCE isn't documented; the token request uses HTTP Basic auth with client ID and secret.",
-    "Verification gates are answered \"no\" because the creation form lists no such step, not because a page says so.",
     "Older Notion docs reportedly said public integrations need a security review; current docs limit it to Marketplace listing. We couldn't read the old version."
   ],
   "claims": [
@@ -441,12 +466,12 @@
     },
     {
       "id": "f3",
-      "text": "If a Notion OAuth app\u2019s scopes or configuration change after a user authorizes it, existing refresh tokens can become invalid and require re\u2011authorization.",
+      "text": "If a Notion OAuth app’s scopes or configuration change after a user authorizes it, existing refresh tokens can become invalid and require re‑authorization.",
       "evidence": "reported",
       "sources": [
         {
           "url": "https://nango.dev/blog/notion-oauth-refresh-token-invalid-grant",
-          "quote": "If the OAuth app\u2019s scopes or configuration change in Notion after authorization, existing refresh tokens can become invalid and require a new authorization.",
+          "quote": "If the OAuth app’s scopes or configuration change in Notion after authorization, existing refresh tokens can become invalid and require a new authorization.",
           "official": false,
           "retrievedAt": "2026-11-09T09:39:46.469Z",
           "quoteMatched": true
@@ -464,7 +489,7 @@
       "sources": [
         {
           "url": "https://developers.notion.com/guides/authorization/overview",
-          "quote": "Both scoped OAuth integrations and public integrations use this flow. You can start authorization as soon as you configure the integration\u2019s client credentials and redirect URI; Marketplace submission or review is not required.",
+          "quote": "Both scoped OAuth integrations and public integrations use this flow. You can start authorization as soon as you configure the integration’s client credentials and redirect URI; Marketplace submission or review is not required.",
           "official": true,
           "retrievedAt": "2026-11-09T09:39:46.476Z",
           "quoteMatched": true
@@ -583,12 +608,127 @@
         "note": "The fields are verbatim; 'no verification step' is inferred from their absence (hand-checked 2026-11-09)"
       },
       "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "t1",
+      "text": "Creating a public OAuth connection was instant: the form asked only for a name, auth method (API token or OAuth), where it can be installed and redirect URIs. No company, privacy policy, terms or review step.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://app.notion.com/developers/connections",
+          "quote": "Create a connection to authenticate apps, agents, and workflows with Notion.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/notion/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t2",
+      "text": "The connection page states redirect rules: HTTPS only, and no URL fragments, relative paths, wildcards or public IP addresses.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://app.notion.com/developers/connections",
+          "quote": "Redirect URLs can’t include URL fragments, relative paths, wildcards, or public IP addresses.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/notion/attempt.md#what-the-form-looks-like-now",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t3",
+      "text": "Redirect matching is exact: an unregistered domain and a sub-path of the registered callback were both rejected with \"Missing or invalid redirect_uri\".",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://api.notion.com/v1/oauth/authorize",
+          "quote": "Missing or invalid redirect_uri.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/notion/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t4",
+      "text": "A new OAuth connection defaults to read, update and insert content, read and insert comments, and user information including email addresses.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://app.notion.com/developers/connections",
+          "quote": "Read user information including email addresses",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/notion/attempt.md#what-the-form-looks-like-now",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t5",
+      "text": "The consent screen names the redirect domain (\"Make sure you trust OAuth Runway test (backend.composio.dev)\") and says Notion does not review third-party connections; the user then picks pages to share.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://api.notion.com/v1/oauth/authorize",
+          "quote": "Notion does not review third party connections",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/notion/attempt.md#consent-screen",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t6",
+      "text": "Notion's developer portal now lives at app.notion.com/developers/connections; \"integrations\" are called \"connections\".",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://app.notion.com/developers/connections",
+          "quote": "Developer tools",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/notion/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
     }
   ],
   "meta": {
     "generatedAt": "2026-11-09T00:00:00.000Z",
     "origin": "curated",
     "reviewStatus": "reviewed",
-    "model": "groq:openai/gpt-oss-120b"
+    "model": "groq:openai/gpt-oss-120b",
+    "testedAt": "2026-11-10"
   }
 }

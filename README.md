@@ -110,8 +110,8 @@ A live Guide costs **$0** in model fees and about 8 Tavily credits (ADR-0004).
 
 ## What was checked
 
-[verification/LOG.md](verification/LOG.md) records 52 Claims across GitHub, Slack, Gmail, Notion and the shared Composio facts. Each was checked by hand against the official page:
-- ✅ **25** confirmed
+[verification/LOG.md](verification/LOG.md) records 61 Claims across GitHub, Slack, Gmail, Notion and the shared Composio facts. Each was checked by hand against the official page:
+- ✅ **34** confirmed
 - ✏️ **16** corrected
 - ⚠️ **8** partly right
 - ❓ **3** couldn't verify
@@ -138,9 +138,9 @@ Seed facts that turned out wrong:
 | Guide | Level | Claims | Tested | Documented | Reported | Unverified |
 |---|---|---|---|---|---|---|
 | GitHub | R1 · **high** | 20 | 7 | 12 | 0 | 1 |
-| Slack | R2–R3? | 15 | 1 | 14 | 0 | 0 |
-| Gmail | R4 | 15 | 1 | 14 | 0 | 0 |
-| Notion | R0 | 14 | 0 | 13 | 1 | 0 |
+| Slack | R2 · medium | 21 | 7 | 14 | 0 | 0 |
+| Gmail | R4 · low | 23 | 9 | 14 | 0 | 0 |
+| Notion | R0 · medium | 20 | 6 | 13 | 1 | 0 |
 
 ### Setup agent attempt: GitHub
 
@@ -154,6 +154,20 @@ Seed facts that turned out wrong:
 | The consent screen says **"Authorizing will redirect to https://backend.composio.dev"** | New gotcha: users see Composio's domain unless you 302-forward from your own |
 | New apps show "Created less than a day ago · Fewer than 10 GitHub users" | New gotcha: own the app from an org so users see a company name |
 | The form now takes a list of up to 10 redirect URIs, with wildcard matching off and expiring tokens on by default | Older docs and screenshots show a single callback field |
+
+### Setup agent attempts: Slack, Notion, Gmail
+
+Same setup on 2026-11-10, in the developer's personal accounts and a throwaway Slack workspace: [Slack](evidence/slack/attempt.md), [Notion](evidence/notion/attempt.md), [Gmail](evidence/gmail/attempt.md). Each test app was deleted afterwards. Agent time: about 2.5 min (Slack), 1.5 min (Notion) and 6 min (Google, up to a working client).
+
+| Observed | Effect on the Guide |
+|---|---|
+| **Slack**: public distribution switched on instantly after a self-service checklist | Business, publisher and domain verification settled as "no": Slack goes from R2–R3? to **R2** |
+| **Slack**: a **sub-path** of the registered redirect is accepted (GitHub, Notion and Google reject it); unconfigured scopes can be requested at runtime | New info gotchas |
+| **Notion**: a public OAuth connection is created instantly with four fields; redirects must match exactly | Two former unknowns settled (redirect rules, no verification step) |
+| **Notion**: consent shows "(backend.composio.dev)" and "Notion does not review third party connections"; new connections default to reading user emails | New gotchas |
+| **Google**: registering Composio's callback adds **composio.dev to Authorized domains**, which you can't verify | The redirect-domain blocker is now Tested, not just inferred |
+| **Google**: in Testing, Gmail scopes return 403 for anyone not on the test-user list, **including the project owner**; sign-in screens say "composio.dev", not the app name | New gotchas: add yourself as a test user; branding matters |
+| Takeovers everywhere: sign-in, agreeing to terms (Notion, Google), copying the secret (Google shows it once), and the final Allow | Matches the step owners. The agent never read a secret. |
 
 ### Stress tests
 
@@ -183,7 +197,7 @@ PLAN §20, run 2026-11-10 from `scripts/stress.ts`. No query crashed.
 
 ## Limitations
 
-- **Only one Setup agent attempt (GitHub).** For Slack, Gmail and Notion, step owners and handoff points come from documented flows, not observed runs, and "Tested" means deterministic probes only. No approval was completed.
+- **One Setup agent attempt per reviewed Guide, each stopping before approval.** The attempts cover creating and configuring the app, not Slack Marketplace review, Google verification or the CASA assessment. The Google 302-forwarder workaround is still untested.
 - **Durations are what providers state.** There's no data on observed approval times, and no approvals were completed.
 - **Generated Guides are unreviewed**, and the agent still makes mistakes: invented usage rows, and an occasional default row with unsettled Gates. Low confidence and level ranges make this visible, but don't prevent it.
 - **JavaScript-rendered docs** sometimes can't be read or quote-checked, which lowers confidence.

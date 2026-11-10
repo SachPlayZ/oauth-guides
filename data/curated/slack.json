@@ -15,7 +15,8 @@
     ],
     "claimIds": [
       "p1",
-      "h10"
+      "h10",
+      "t5"
     ]
   },
   "composio": {
@@ -53,7 +54,8 @@
           "key": "manual_approval_uncertain",
           "answer": "no",
           "claimIds": [
-            "h1"
+            "h1",
+            "t1"
           ]
         },
         {
@@ -66,18 +68,24 @@
         },
         {
           "key": "business_verification",
-          "answer": "unknown",
-          "claimIds": []
+          "answer": "no",
+          "claimIds": [
+            "t1"
+          ]
         },
         {
           "key": "publisher_verification",
-          "answer": "unknown",
-          "claimIds": []
+          "answer": "no",
+          "claimIds": [
+            "t1"
+          ]
         },
         {
           "key": "domain_verification",
-          "answer": "unknown",
-          "claimIds": []
+          "answer": "no",
+          "claimIds": [
+            "t1"
+          ]
         },
         {
           "key": "scope_verification",
@@ -91,7 +99,8 @@
           "key": "production_access_review",
           "answer": "no",
           "claimIds": [
-            "h1"
+            "h1",
+            "t1"
           ]
         },
         {
@@ -143,7 +152,8 @@
           "key": "manual_approval_uncertain",
           "answer": "no",
           "claimIds": [
-            "h1"
+            "h1",
+            "t1"
           ]
         },
         {
@@ -156,18 +166,24 @@
         },
         {
           "key": "business_verification",
-          "answer": "unknown",
-          "claimIds": []
+          "answer": "no",
+          "claimIds": [
+            "t1"
+          ]
         },
         {
           "key": "publisher_verification",
-          "answer": "unknown",
-          "claimIds": []
+          "answer": "no",
+          "claimIds": [
+            "t1"
+          ]
         },
         {
           "key": "domain_verification",
-          "answer": "unknown",
-          "claimIds": []
+          "answer": "no",
+          "claimIds": [
+            "t1"
+          ]
         },
         {
           "key": "scope_verification",
@@ -181,7 +197,8 @@
           "key": "production_access_review",
           "answer": "no",
           "claimIds": [
-            "h1"
+            "h1",
+            "t1"
           ]
         },
         {
@@ -263,15 +280,16 @@
       "id": "s2",
       "phase": "create",
       "title": "Create a Slack app",
-      "detail": "At api.slack.com/apps → Create New App → From scratch. Name it (users see this on the consent screen) and pick a development workspace.",
+      "detail": "At api.slack.com/apps → Create New App → From a manifest. Pick a development workspace (it can't be changed later) and paste a manifest with the app name, the Composio redirect URL and your scopes.",
       "owner": "setup_agent",
       "takeoverPoints": [
         "Sign in to Slack"
       ],
-      "estMinutes": 10,
+      "estMinutes": 3,
       "blockers": [],
       "claimIds": [
-        "h1"
+        "h1",
+        "t2"
       ],
       "url": "https://api.slack.com/apps"
     },
@@ -279,14 +297,15 @@
       "id": "s3",
       "phase": "configure",
       "title": "Add the redirect URL and scopes",
-      "detail": "OAuth & Permissions → Redirect URLs: add the Composio callback (HTTPS, no #). Add the bot/user scopes your agent needs, e.g. channels:history, chat:write.",
+      "detail": "OAuth & Permissions → check the redirect URL (HTTPS, no #) and the bot/user scopes from the manifest, e.g. channels:history, chat:write. Leave PKCE and token rotation off unless you need them; PKCE can't be turned off later.",
       "owner": "setup_agent",
       "takeoverPoints": [],
-      "estMinutes": 10,
+      "estMinutes": 2,
       "blockers": [],
       "claimIds": [
         "h9",
-        "k3"
+        "k3",
+        "t5"
       ]
     },
     {
@@ -321,15 +340,16 @@
       "id": "s6",
       "phase": "launch",
       "title": "Activate public distribution",
-      "detail": "Manage Distribution → complete the checklist (remove hard-coded secrets, HTTPS redirect) → Activate Public Distribution. Now any workspace can install it.",
+      "detail": "Manage Distribution → three checklist items tick themselves once a redirect URL and HTTPS are set; confirm you removed hard-coded tokens → Activate Public Distribution. Any workspace can install it straight away.",
       "owner": "setup_agent_drafts",
       "takeoverPoints": [
         "Final 'Activate Public Distribution' click"
       ],
-      "estMinutes": 15,
+      "estMinutes": 2,
       "blockers": [],
       "claimIds": [
-        "h1"
+        "h1",
+        "t1"
       ]
     },
     {
@@ -417,12 +437,25 @@
       "claimIds": [
         "h10"
       ]
+    },
+    {
+      "text": "Slack accepts a sub-path of a registered redirect URL, so register the exact Composio callback and nothing broader.",
+      "severity": "info",
+      "claimIds": [
+        "t3"
+      ]
+    },
+    {
+      "text": "You can request scopes at runtime that aren't configured on the app, but after a Marketplace listing only approved scopes work.",
+      "severity": "info",
+      "claimIds": [
+        "t4"
+      ]
     }
   ],
   "unknowns": [
-    "Whether business, publisher or domain verification is needed for public distribution: none is described, but no page rules it out.",
     "Marketplace review has only maximum durations; the minimum isn't stated.",
-    "Not yet tested hands-on with a Setup agent."
+    "The Setup agent attempt didn't exercise Marketplace submission or measure the history rate limit."
   ],
   "claims": [
     {
@@ -695,12 +728,127 @@
         "note": "Hand-verified against the page, 2026-11-09"
       },
       "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "t1",
+      "text": "Activating public distribution took one click after a self-service checklist (three items auto-checked, plus a box confirming no hard-coded tokens): no review, verification or questionnaire.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://api.slack.com/apps",
+          "quote": "Activate Public Distribution",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/slack/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t2",
+      "text": "Creating the app from a pasted manifest (name, redirect URL, bot and user scopes) was instant; the app is tied to one development workspace that can't be changed later.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://api.slack.com/apps",
+          "quote": "This can’t be changed later.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/slack/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t3",
+      "text": "Redirect matching is partial: an unregistered domain was rejected, but a sub-path of the registered callback was accepted.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://slack.com/oauth/v2/authorize",
+          "quote": "redirect_uri did not match any configured URIs",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/slack/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t4",
+      "text": "Scopes not configured on the app can still be requested in the authorize URL; the consent screen listed them.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://slack.com/oauth/v2/authorize",
+          "quote": "Allow OAuth Runway test to access Slack",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/slack/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t5",
+      "text": "PKCE and token rotation are both opt-in and off by default on a new app.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://api.slack.com/apps",
+          "quote": "Enabling this feature lets your app use PKCE during OAuth.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/slack/attempt.md#settings-observed",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t6",
+      "text": "Slack's consent screen doesn't show the redirect domain; it shows the app name and the workspace being installed to.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://slack.com/oauth/v2/authorize",
+          "quote": "Where do you want to use OAuth Runway test?",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/slack/attempt.md#consent-screen",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
     }
   ],
   "meta": {
     "generatedAt": "2026-11-09T00:00:00.000Z",
     "origin": "curated",
     "reviewStatus": "reviewed",
-    "model": "groq:openai/gpt-oss-120b"
+    "model": "groq:openai/gpt-oss-120b",
+    "testedAt": "2026-11-10"
   }
 }

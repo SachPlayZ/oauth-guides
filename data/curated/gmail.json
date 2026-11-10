@@ -79,7 +79,8 @@
           "key": "domain_verification",
           "answer": "yes",
           "claimIds": [
-            "g9"
+            "g9",
+            "t7"
           ]
         },
         {
@@ -94,7 +95,9 @@
           "key": "production_access_review",
           "answer": "yes",
           "claimIds": [
-            "g8"
+            "g8",
+            "t5",
+            "t8"
           ]
         },
         {
@@ -192,7 +195,8 @@
           "key": "domain_verification",
           "answer": "yes",
           "claimIds": [
-            "g9"
+            "g9",
+            "t7"
           ]
         },
         {
@@ -207,7 +211,9 @@
           "key": "production_access_review",
           "answer": "yes",
           "claimIds": [
-            "g8"
+            "g8",
+            "t5",
+            "t8"
           ]
         },
         {
@@ -337,7 +343,9 @@
       "text": "Testing: up to 100 test users, and their authorizations expire after 7 days.",
       "claimIds": [
         "g6",
-        "g7"
+        "g7",
+        "t5",
+        "t6"
       ]
     },
     {
@@ -368,16 +376,18 @@
       "id": "s2",
       "phase": "create",
       "title": "Create a Google Cloud project and branding",
-      "detail": "Google Auth Platform → Branding: app name, support email, home page, privacy policy, authorized domains. Audience: External.",
+      "detail": "Create a project, then Google Auth Platform → Get started: app name, support email, Audience: External, contact email, agree to the User Data Policy. Home page, privacy policy and logo can wait until you publish.",
       "owner": "setup_agent",
       "takeoverPoints": [
         "Sign in to Google",
-        "Accept Google Cloud terms"
+        "Agree to the Google API Services User Data Policy"
       ],
-      "estMinutes": 15,
+      "estMinutes": 5,
       "blockers": [],
       "claimIds": [
-        "g9"
+        "g9",
+        "t1",
+        "t8"
       ],
       "url": "https://console.cloud.google.com/auth/branding"
     },
@@ -385,30 +395,33 @@
       "id": "s3",
       "phase": "configure",
       "title": "Add Gmail scopes and test users",
-      "detail": "Data Access → add the Gmail scopes. Audience → add up to 100 test users.",
+      "detail": "Data Access → add the Gmail scopes. Audience → add test users, including yourself: the project owner isn't a test user automatically.",
       "owner": "setup_agent",
       "takeoverPoints": [],
       "estMinutes": 10,
       "blockers": [],
       "claimIds": [
         "g1",
-        "g6"
+        "g6",
+        "t5"
       ]
     },
     {
       "id": "s4",
       "phase": "create",
       "title": "Create the OAuth client",
-      "detail": "Clients → Create client → Web application. Authorized redirect URI: the Composio callback, or your own domain's forwarder (see gotchas).",
+      "detail": "Clients → Create client → Web application. Authorized redirect URI: the Composio callback (exact match), or your own domain's forwarder (see gotchas).",
       "owner": "setup_agent",
       "takeoverPoints": [
-        "Reveal the client secret"
+        "Copy the client secret: it's shown only once"
       ],
-      "estMinutes": 5,
+      "estMinutes": 2,
       "blockers": [],
       "claimIds": [
         "k3",
-        "g10"
+        "g10",
+        "t2",
+        "t3"
       ]
     },
     {
@@ -514,11 +527,12 @@
   ],
   "gotchas": [
     {
-      "text": "Redirect URI domains must be verified authorized domains, and you can't verify composio.dev. Plan for your own callback domain that 302-forwards to Composio (our inference; test it).",
+      "text": "Using Composio's callback adds composio.dev to your authorized domains, and verification needs every authorized domain verified, which you can't do for composio.dev. Plan for your own callback domain that 302-forwards to Composio (the forwarder itself isn't tested yet).",
       "severity": "blocker",
       "claimIds": [
         "g9",
-        "g10"
+        "g10",
+        "t7"
       ]
     },
     {
@@ -548,6 +562,20 @@
       "severity": "warn",
       "claimIds": [
         "k4"
+      ]
+    },
+    {
+      "text": "The project owner isn't a test user automatically; add yourself or Gmail scopes fail with 403 access_denied.",
+      "severity": "warn",
+      "claimIds": [
+        "t5"
+      ]
+    },
+    {
+      "text": "Until the app is branded and verified, Google's sign-in screens say \"composio.dev\", not your app name.",
+      "severity": "info",
+      "claimIds": [
+        "t4"
       ]
     }
   ],
@@ -828,12 +856,165 @@
         "note": "Section 'register your own provider callback endpoint'; the quote is about branding"
       },
       "checkedAt": "2026-11-09T00:00:00.000Z"
+    },
+    {
+      "id": "t1",
+      "text": "Creating a project and configuring Google Auth Platform took minutes with no review: app name, support email, audience (External), contact email and agreeing to the User Data Policy. The app starts in Testing.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://console.cloud.google.com/auth/overview",
+          "quote": "Google Auth Platform not configured yet",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t2",
+      "text": "The client secret is shown once, when the OAuth client is created; it can't be viewed or downloaded after the dialog closes.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://console.cloud.google.com/auth/clients",
+          "quote": "You will no longer be able to view or download the client secret once you close this dialog.",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t3",
+      "text": "Redirect matching is exact: an unregistered domain and a sub-path of the registered callback both failed with Error 400: redirect_uri_mismatch.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://accounts.google.com/o/oauth2/v2/auth",
+          "quote": "Error 400: redirect_uri_mismatch",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t4",
+      "text": "In Testing, Google's sign-in screens named the redirect domain, not the app: \"Choose an account to continue to composio.dev\" and \"Sign in to composio.dev\".",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://accounts.google.com/o/oauth2/v2/auth",
+          "quote": "Sign in to composio.dev",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#consent-screens-what-your-users-see",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t5",
+      "text": "In Testing, Gmail scopes are blocked for any account not on the test-user list, including the project owner (Error 403: access_denied). Basic openid/email sign-in still worked for the owner.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://accounts.google.com/o/oauth2/v2/auth",
+          "quote": "can only be accessed by developer-approved testers",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#timeline",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t6",
+      "text": "Once added as a test user, the account saw \"Google hasn't verified this app\" with a Continue option; the Audience page counted it against the 100-user lifetime cap.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://accounts.google.com/o/oauth2/v2/auth",
+          "quote": "Google hasn’t verified this app",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#consent-screens-what-your-users-see",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t7",
+      "text": "Registering Composio's callback added composio.dev to the project's Authorized domains automatically.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://console.cloud.google.com/auth/branding",
+          "quote": "Authorized domain 1",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#what-the-console-showed",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
+    },
+    {
+      "id": "t8",
+      "text": "While in Testing the Verification Center says verification isn't required; publishing needs the Branding page completed first.",
+      "evidence": "tested",
+      "sources": [
+        {
+          "url": "https://console.cloud.google.com/auth/verification",
+          "quote": "Verification is not required since your app is configured with a Testing publishing status",
+          "official": true,
+          "retrievedAt": "2026-11-10"
+        }
+      ],
+      "testedRef": "evidence/gmail/attempt.md#what-the-console-showed",
+      "verifier": {
+        "status": "supported",
+        "note": "Setup agent attempt, 2026-11-10"
+      },
+      "checkedAt": "2026-11-10"
     }
   ],
   "meta": {
     "generatedAt": "2026-11-09T00:00:00.000Z",
     "origin": "curated",
     "reviewStatus": "reviewed",
-    "model": "groq:openai/gpt-oss-120b"
+    "model": "groq:openai/gpt-oss-120b",
+    "testedAt": "2026-11-10"
   }
 }

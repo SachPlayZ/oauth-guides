@@ -2,9 +2,9 @@
 
 Checked 2026-11-09. Each agent draft (`<slug>/draft-v1.json`) was compared, claim by claim, against the official pages. Every row below was read on the page itself, not taken from the agent's quote. Reviewed Guides are in `<slug>/final.json` (= `data/curated/<slug>.json`).
 
-**Summary:** 52 Claims across 5 Guides (GitHub, Slack, Gmail, Notion, plus Composio facts shared by all) — ✅ 25 confirmed · ✏️ 16 corrected · ⚠️ 8 partial · ❓ 3 couldn't verify
+**Summary:** 61 Claims across 5 Guides (GitHub, Slack, Gmail, Notion, plus Composio facts shared by all) — ✅ 34 confirmed · ✏️ 16 corrected · ⚠️ 8 partial · ❓ 3 couldn't verify
 
-**Hands-on:** one Setup agent attempt, for GitHub (2026-11-10, [evidence/github/attempt.md](../evidence/github/attempt.md)). It added Tested Claims t1–t7 and moved GitHub to high confidence. The Slack, Gmail and Notion attempts weren't done; their only Tested Claims come from deterministic probes.
+**Hands-on:** one Setup agent attempt per Guide, 2026-11-10: [GitHub](../evidence/github/attempt.md), [Slack](../evidence/slack/attempt.md), [Notion](../evidence/notion/attempt.md), [Gmail](../evidence/gmail/attempt.md). They added 27 Tested Claims (t1–t6 or t1–t8 in each Guide); rows marked "tested" below come from them.
 
 ## Error patterns
 
@@ -51,6 +51,9 @@ Checked 2026-11-09. Each agent draft (`<slug>/draft-v1.json`) was compared, clai
 | Slack | Redirect mismatch returns 400 | Cited a Nango post about `invalid_team` | Quote is about a different error | ⚠️ | nango.dev |
 | Slack | PKCE | Not found | `pkce_enabled` app setting, can't be turned off; client types not documented | ⚠️ | docs.slack.dev/reference/app-manifest |
 | Slack | Privacy-policy criticism | Gotcha from Wikipedia | Off-topic, removed | ✏️ | — |
+| Slack | Public distribution without review | Seed: business/domain verification unknown | Activated instantly after a self-service checklist; no verification of any kind (tested) | ✅ | evidence/slack/attempt.md |
+| Slack | Redirect matching | Not stated | **Partial match**: sub-path of the registered URL accepted, other domains rejected (tested) | ✅ | evidence/slack/attempt.md |
+| Slack | Runtime scopes | — | Scopes not configured on the app still appear on consent when requested (tested) | ✅ | evidence/slack/attempt.md |
 | Gmail | Security assessment | Annual assessment for server access | Confirmed for restricted scopes ("undergo", not "pass") | ✅ | …/restricted-scope-verification |
 | Gmail | gmail.send classification | Triggers verification | Sensitive (not restricted); readonly/modify/compose restricted | ✅ | developers.google.com/workspace/gmail/api/auth/scopes |
 | Gmail | Restricted verification time | "Several weeks" for sensitive | "Several weeks" is restricted; sensitive pages say up to 10 days | ⚠️ | …/sensitive-scope-verification |
@@ -66,6 +69,9 @@ Checked 2026-11-09. Each agent draft (`<slug>/draft-v1.json`) was compared, clai
 | Gmail | IAP OAuth Admin API deprecation | Listed as a change | Off-topic (Identity-Aware Proxy), removed | ✏️ | — |
 | Gmail | OAuth client creation | Workforce Identity Federation docs | Off-topic product, removed | ✏️ | — |
 | Gmail | Redirect mismatch | Nest Device Access error docs | Off-topic source, removed | ✏️ | — |
+| Gmail | Redirect domain blocks verification | Our inference | composio.dev is added to Authorized domains automatically when you register Composio's callback (tested); verifying it is impossible | ✅ | evidence/gmail/attempt.md |
+| Gmail | Testing mode access | Seed: 100 test users | Gmail scopes 403 for non-test users, **including the project owner**; test users get the unverified warning (tested) | ✅ | evidence/gmail/attempt.md |
+| Gmail | Consent branding | — | Unverified, unbranded app: Google says "Sign in to composio.dev", not the app name (tested) | ✅ | evidence/gmail/attempt.md |
 | Notion | One-liner | "Requires no special gates" with all gates unknown | Contradicted its own gates | ✏️ | — |
 | Notion | Review before production (seed conflict) | Not found | No review; Notion's security review is only for Marketplace listing | ✅ | developers.notion.com/guides/connections-and-tokens/public-integrations/overview |
 | Notion | Rate limit | ~180/min (Reddit) | 180/min **per connection**; 600/min on Business/Enterprise; separate workspace limit | ⚠️ | developers.notion.com/reference/request-limits |
@@ -77,6 +83,9 @@ Checked 2026-11-09. Each agent draft (`<slug>/draft-v1.json`) was compared, clai
 | Notion | Admin of workspace needed | Third-party (Apideck) | Not stated in Notion docs | ❓ | — |
 | Notion | Redirect exact match | Third-party (hexdocs) | Not stated by Notion | ⚠️ | authorization/overview |
 | Notion | PKCE | Not found | Not documented; token request uses HTTP Basic | ✅ | authorization/overview |
+| Notion | No review for public connections | Documented only | Created instantly with name, auth type, install scope and redirect URI; no review (tested) | ✅ | evidence/notion/attempt.md |
+| Notion | Redirect exact match | Not stated by Notion | Sub-path rejected (tested); page lists HTTPS, no fragments/wildcards/public IPs | ✅ | evidence/notion/attempt.md |
+| Notion | Consent screen | — | Shows "(backend.composio.dev)" and "Notion does not review third party connections" (tested) | ✅ | evidence/notion/attempt.md |
 | Composio | Callback URL (v3 or v3.1?) | Unknown | `https://backend.composio.dev/api/v3/toolkits/auth/callback` | ✅ | docs.composio.dev/docs/authentication/white-labeling-authentication |
 | Composio | Polling minimum (seed: 15 min) | — | Managed auth enforces a **2-minute** minimum | ✏️ | docs.composio.dev/docs/authentication/custom-app-vs-managed-app |
 | Composio | Why own app | — | Branding, custom scopes, own quota, faster polling, Toolkits without managed auth | ✅ | custom-app-vs-managed-app |
@@ -95,6 +104,6 @@ Checked 2026-11-09. Each agent draft (`<slug>/draft-v1.json`) was compared, clai
 | Guide | v1 | v2 | Reviewed |
 |---|---|---|---|
 | GitHub | (hand-written) R1 | — | R1 |
-| Slack | R5 | R3–R5? | R2–R3? |
+| Slack | R5 | R3–R5? | R2 (R2–R3? before the hands-on attempt) |
 | Gmail | R4–R5? | R5 (first run) → R4 restricted row | R4 |
 | Notion | R0–R5? | R1–R5? | R0 |
