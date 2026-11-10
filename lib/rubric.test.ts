@@ -41,11 +41,15 @@ describe("curated GitHub guide", () => {
     expect(g.verdict.computed!.level).toBe(1);
     expect(formatLevel(g.verdict.computed!.level, g.verdict.computed!.levelCeiling)).toBe("R1");
   });
-  it("is low confidence while 'no review' is unverified", () => {
-    expect(g.verdict.computed!.confidence).toBe("low");
+  it("is high confidence once 'no review' is Tested (Setup agent attempt)", () => {
+    expect(g.verdict.computed!.confidence).toBe("high");
+  });
+  it("drops to low confidence when the Gates rest on an Unverified Claim", () => {
+    const rows = github.usageRows.map((r) => ({ ...r, gates: r.gates.map((x) => (x.answer === "no" ? { ...x, claimIds: ["c11"] } : x)) }));
+    expect(computeGuide({ ...github, usageRows: rows }).verdict.computed!.confidence).toBe("low");
   });
   it("sums step estimates into effort and starts at the first step you own", () => {
-    expect(g.verdict.computed!.handsOnEffort).toEqual({ min: 25, max: 38, unit: "minutes" });
+    expect(g.verdict.computed!.handsOnEffort).toEqual({ min: 23, max: 35, unit: "minutes" });
     expect(g.verdict.computed!.startHereStepId).toBe("s3");
   });
 });
